@@ -1,0 +1,7 @@
+.teachMainCont {
+    width: 100%;
+    padding-top: 50px;
+    box-sizing: border-box;
+    /* min-height: calc(100vh - 80px); */
+    padding-bottom: 50px;
+}
