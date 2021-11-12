@@ -3,8 +3,6 @@ import { Container } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
 import { useHistory } from "react-router-dom";
 
 import "./Learn.css";
