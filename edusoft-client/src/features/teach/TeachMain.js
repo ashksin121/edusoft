@@ -61,7 +61,12 @@ const TeachMain = () => {
                         variant="extended"
                         color="primary"
                         aria-label="add"
-                        style={{ fontSize: 19, fontWeight: "bold" }}
+                        style={{
+                            fontSize: 19,
+                            fontWeight: "bold",
+                            backgroundColor: "#ffb901",
+                            color: "black",
+                        }}
                         onClick={() => {
                             history.push("/teach/addCourse");
                         }}

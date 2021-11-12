@@ -1,0 +1,42 @@
+.profileCoinsCont {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.profileCoinsTitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffb901;
+}
+
+.profileCoinsValue {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffb901;
+}
+
+.profileDataCont {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.profileDataHeading {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.profileDataValue {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.profileButtonCont {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 50px 0;
+}

@@ -8,7 +8,11 @@ import {
 import "./App.css";
 import CourseDetails from "./features/courseDetails/CourseDetails";
 import LandingPage from "./features/landingPage/LandingPage";
+import AllCourses from "./features/learn/AllCourses";
+import CompletedCourses from "./features/learn/CompletedCourses";
 import LearnMain from "./features/learn/LearnMain";
+import PendingCourses from "./features/learn/PendingCourses";
+import Profile from "./features/profile/Profile";
 import AcceptedCourses from "./features/teach/AcceptedCourses";
 import AddCourse from "./features/teach/AddCourse";
 import RejectedCourses from "./features/teach/RejectedCourses";
@@ -42,6 +46,22 @@ function App() {
                         path="/teach/rejectedCourses"
                         component={RejectedCourses}
                     />
+                    <Route
+                        exact
+                        path="/learn/allCourses"
+                        component={AllCourses}
+                    />
+                    <Route
+                        exact
+                        path="/learn/pendingCourses"
+                        component={PendingCourses}
+                    />
+                    <Route
+                        exact
+                        path="/learn/completedCourses"
+                        component={CompletedCourses}
+                    />
+                    <Route exact path="/profile" component={Profile} />
                     <Route exact path="/course/:id" component={CourseDetails} />
                     <Route exact path="/" component={LandingPage} />
                 </Switch>

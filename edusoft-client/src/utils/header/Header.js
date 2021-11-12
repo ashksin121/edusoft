@@ -19,7 +19,12 @@ const Header = ({ headerUrl }) => {
         <div className="headerMain">
             <Container style={{ height: "80px" }}>
                 <div className="headerCont">
-                    <div className="headerLogo">
+                    <div
+                        className="headerLogo"
+                        onClick={() => {
+                            history.push("/");
+                        }}
+                    >
                         <img src={Logo} alt="Logo" className="AppLogoHeader" />
                         EduSoft
                     </div>
@@ -29,7 +34,7 @@ const Header = ({ headerUrl }) => {
                             style={{
                                 backgroundColor:
                                     url === "learn" ? "black" : "transparent",
-                                color: url === "learn" ? "white" : "black",
+                                color: url === "learn" ? "#ffb901" : "black",
                             }}
                             onClick={() => handleRoute("/learn")}
                         >
@@ -40,13 +45,18 @@ const Header = ({ headerUrl }) => {
                             style={{
                                 backgroundColor:
                                     url === "teach" ? "black" : "transparent",
-                                color: url === "teach" ? "white" : "black",
+                                color: url === "teach" ? "#ffb901" : "black",
                             }}
                             onClick={() => handleRoute("/teach")}
                         >
                             Teach
                         </div>
-                        <div>
+                        <div
+                            className="headerAvatar"
+                            onClick={() => {
+                                history.push("/profile");
+                            }}
+                        >
                             <Avatar
                                 alt="user"
                                 className="headerUser"

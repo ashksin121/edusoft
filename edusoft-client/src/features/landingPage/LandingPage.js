@@ -103,7 +103,7 @@ const LandingPage = () => {
                                 >
                                     <LockIcon
                                         style={{
-                                            color: "#f24f1c",
+                                            color: "#f25022",
                                             fontSize: "40px",
                                         }}
                                     />
@@ -228,7 +228,7 @@ const LandingPage = () => {
                                 {isLoading ? (
                                     <div className="loginCircularProgress">
                                         <CircularProgress
-                                            style={{ color: "#EA4D23" }}
+                                            style={{ color: "#f25022" }}
                                         />
                                     </div>
                                 ) : isSignup ? (

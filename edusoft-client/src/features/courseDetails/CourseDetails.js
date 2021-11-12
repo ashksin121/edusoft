@@ -137,6 +137,10 @@ const CourseDetails = () => {
                     </Grid>
                     <div className="pageSubHeading">Quiz</div>
                     <Divider style={{ marginBottom: 30 }} />
+                    <div className="courseScoreCont">
+                        <div>Your Score:</div>
+                        <div>3/5</div>
+                    </div>
                     {questions.map((ques, idx) => (
                         <div key={idx} className="quizCard">
                             <FormControl
@@ -147,6 +151,7 @@ const CourseDetails = () => {
                                     fullWidth
                                     label={`Question ${idx + 1}`}
                                     value={ques.question}
+                                    disabled
                                     onChange={(e) => {
                                         let newQuestions = [...questions];
                                         newQuestions[idx].question =
@@ -166,6 +171,7 @@ const CourseDetails = () => {
                                                 fullWidth
                                                 label={`Option ${indx + 1}`}
                                                 value={opt}
+                                                disabled
                                                 onChange={(e) => {
                                                     let newQuestions = [
                                                         ...questions,
