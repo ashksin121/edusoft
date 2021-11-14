@@ -12,9 +12,18 @@ import { makeStyles } from "@mui/styles";
 import LockIcon from "@mui/icons-material/Lock";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { toast } from "react-toastify";
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signInWithEmailAndPassword,
+} from "@firebase/auth";
 
 import "./LandingPage.css";
 import Logo from "../../assets/logo.png";
+import { logIn, signUp } from "../profile/profileSlice";
 
 const useStyles = makeStyles({
     root: {
@@ -49,6 +58,8 @@ const useStyles = makeStyles({
 
 const LandingPage = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const history = useHistory();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -61,12 +72,99 @@ const LandingPage = () => {
         setShowPassword(!showPassword);
     };
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         setIsLoading(true);
+        if (email === "" || password === "") {
+            toast.error("One or more missing data", {
+                containerId: "toastMessage",
+            });
+            setIsLoading(false);
+            return;
+        }
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            toast.error("Invalid Data", {
+                containerId: "toastMessage",
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const auth = getAuth();
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            console.log(userCredential.user);
+            dispatch(logIn(userCredential.user));
+            history.push("/learn");
+        } catch (e) {
+            setIsLoading(false);
+            console.log(e.code);
+            if (e.code === "auth/user-not-found") {
+                toast.error("Email not registered", {
+                    containerId: "toastMessage",
+                });
+                setEmail("");
+                setPassword("");
+            } else if (e.code === "auth/wrong-password") {
+                toast.error("Wrong passowrd", {
+                    containerId: "toastMessage",
+                });
+                setPassword("");
+            }
+        }
     };
 
-    const handleSignup = () => {
+    const handleSignup = async () => {
         setIsLoading(true);
+        if (email === "" || name === "" || password === "") {
+            toast.error("One or more missing data", {
+                containerId: "toastMessage",
+            });
+            setIsLoading(false);
+            return;
+        }
+        if (
+            !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) ||
+            !/^[A-Za-z ]+$/.test(name)
+        ) {
+            toast.error("Invalid Data", {
+                containerId: "toastMessage",
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const auth = getAuth();
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            const userData = {
+                name: name,
+                user: userCredential.user,
+            };
+            dispatch(signUp(userData));
+            history.push("/learn");
+        } catch (e) {
+            setIsLoading(false);
+            console.log(e.code);
+            if (e.code === "auth/email-already-in-use") {
+                toast.error("Email already in use", {
+                    containerId: "toastMessage",
+                });
+                setEmail("");
+            } else if (e.code === "auth/weak-password") {
+                toast.error("Weak passowrd", {
+                    containerId: "toastMessage",
+                });
+                setPassword("");
+            }
+        }
     };
 
     const handleSwitch = () => {

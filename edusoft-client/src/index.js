@@ -5,10 +5,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
+            <ToastContainer
+                theme="dark"
+                enableMultiContainer
+                containerId={"toastMessage"}
+                position={toast.POSITION.TOP_RIGHT}
+                autoClose={2000}
+            />
             <App />
         </Provider>
     </React.StrictMode>,

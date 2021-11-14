@@ -1,10 +1,25 @@
 import { Button, Container, Divider } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import Header from "../../utils/header/Header";
 
 import "./Profile.css";
+import { logOut } from "./profileSlice";
 
 const Profile = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const handleLogout = async () => {
+        try {
+            await dispatch(logOut());
+            history.push("/");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <div className="appBody">
             <Header headerUrl="none" />
@@ -71,6 +86,7 @@ const Profile = () => {
                         <Button
                             variant="contained"
                             style={{ backgroundColor: "#f25022" }}
+                            onClick={handleLogout}
                         >
                             Logout
                         </Button>
