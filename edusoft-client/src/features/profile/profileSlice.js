@@ -58,16 +58,16 @@ export const signUp = (userData) => {
     };
 };
 
-export const logIn = (user) => {
+export const logIn = (userId) => {
     return async (dispatch) => {
-        console.log(user);
-        const docRef = doc(db, "users", user.uid);
+        console.log(userId);
+        const docRef = doc(db, "users", userId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
             const userData = docSnap.data();
             console.log(userData);
-            localStorage.setItem("userId", userData.userId);
+            localStorage.setItem("userId", userId);
             dispatch(
                 setProfile({
                     name: userData.name,

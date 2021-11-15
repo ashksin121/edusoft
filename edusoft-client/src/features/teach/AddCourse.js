@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
     Button,
     Chip,
+    CircularProgress,
     Container,
     Divider,
     FormControl,
@@ -13,9 +14,15 @@ import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CheckIcon from "@mui/icons-material/Check";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useHistory } from "react-router";
+import { addDoc, collection } from "@firebase/firestore";
 
 import Header from "../../utils/header/Header";
 import UploadedDocumentCard from "../../utils/uploadedDocumentCard/UploadedDocumentCard";
+import { db } from "../../firebase";
 
 const ListItem = styled("li")(({ theme }) => ({
     margin: theme.spacing(0.5),
@@ -63,7 +70,11 @@ const useStyles = makeStyles({
 
 const AddCourse = () => {
     const classes = useStyles();
+    const history = useHistory();
 
+    const userId = useSelector((state) => state.profile.userId);
+
+    const [isLoading, setIsLoading] = useState(false);
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
     const [tags, setTags] = useState("");
@@ -98,8 +109,9 @@ const AddCourse = () => {
     ]);
 
     const handleAddTag = () => {
+        const d = new Date();
         const tagObj = {
-            key: new Date(),
+            key: d.toString(),
             label: tags,
         };
         let tagArr = tagArray;
@@ -119,6 +131,7 @@ const AddCourse = () => {
     };
 
     const handleSubmit = () => {
+        setIsLoading(true);
         let allCheck = true;
         if (
             title.length === 0 ||
@@ -145,11 +158,53 @@ const AddCourse = () => {
                 }
             });
         });
-        if (allCheck) {
-            console.log("SUCCESS");
-        } else {
-            console.log("FAIL");
+        if (!allCheck) {
+            toast.error("Missing or Invalid Data", {
+                containerId: "toastMessage",
+            });
+            setIsLoading(false);
+            return;
         }
+        const promises = [];
+        const urlPromises = [];
+        let fileRef = [];
+        let fileUrl = [];
+        filesArray.forEach((file) => {
+            const storage = getStorage();
+            const storageRef = ref(storage, userId + "/" + file.name);
+            const uploadTask = uploadBytes(storageRef, file).then(
+                (snapshot) => {
+                    fileRef.push(storageRef);
+                }
+            );
+            promises.push(uploadTask);
+        });
+        Promise.all(promises)
+            .then((tasks) => {
+                fileRef.forEach((storeRef) => {
+                    const getUrlTask = getDownloadURL(storeRef).then((url) => {
+                        fileUrl.push(url);
+                    });
+                    urlPromises.push(getUrlTask);
+                });
+                Promise.all(urlPromises).then(async (tasks) => {
+                    const courseData = {
+                        title: title,
+                        desc: desc,
+                        tagArray: tagArray,
+                        fileUrl: fileUrl,
+                        questions: questions,
+                        instructorId: userId,
+                        status: "REVIEW",
+                    };
+                    await addDoc(collection(db, "courses"), courseData);
+                    history.push("/teach/uploadedCourses");
+                });
+            })
+            .catch((e) => {
+                setIsLoading(false);
+                console.log(e);
+            });
     };
 
     return (
@@ -207,8 +262,8 @@ const AddCourse = () => {
                                         onChange={(e) => {
                                             setTags(e.target.value);
                                         }}
-                                        inputProps={{ maxLength: 10 }}
-                                        helperText={`${tags.length}/10`}
+                                        inputProps={{ maxLength: 15 }}
+                                        helperText={`${tags.length}/15`}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={2}>
@@ -371,20 +426,34 @@ const AddCourse = () => {
                             </FormControl>
                         </div>
                     ))}
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        startIcon={<CheckIcon style={{ fontSize: 35 }} />}
-                        style={{
-                            fontSize: 25,
-                            backgroundColor: "#7fba00",
-                            marginBottom: 50,
-                            marginTop: 20,
-                        }}
-                        onClick={handleSubmit}
-                    >
-                        Submit for approval
-                    </Button>
+                    {isLoading ? (
+                        <div
+                            className="loginCircularProgress"
+                            style={{ marginBottom: 50 }}
+                        >
+                            <CircularProgress
+                                style={{
+                                    color: "#f25022",
+                                    marginTop: 50,
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            startIcon={<CheckIcon style={{ fontSize: 35 }} />}
+                            style={{
+                                fontSize: 25,
+                                backgroundColor: "#7fba00",
+                                marginBottom: 50,
+                                marginTop: 20,
+                            }}
+                            onClick={handleSubmit}
+                        >
+                            Submit for approval
+                        </Button>
+                    )}
                 </Container>
             </div>
         </div>

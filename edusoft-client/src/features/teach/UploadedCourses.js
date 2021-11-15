@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { Container, Divider, Input } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { CircularProgress, Container, Divider, Input } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { makeStyles } from "@mui/styles";
+import { useSelector, useDispatch } from "react-redux";
 
 import "./Teach.css";
 import Header from "../../utils/header/Header";
 import CourseCard from "../../utils/courseCard/CourseCard";
+import { getTeachingData } from "./teachSlice";
+import NoData from "../../utils/noData/NoData";
 
 const useStyles = makeStyles({
     searchInput: {
@@ -18,8 +21,17 @@ const useStyles = makeStyles({
 
 const UploadedCourses = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const [searchValue, setSearchValue] = useState("");
+
+    const userId = useSelector((state) => state.profile.userId);
+    const isLoading = useSelector((state) => state.teach.isLoading);
+    const uploadedCourses = useSelector((state) => state.teach.uploadedCourses);
+
+    useEffect(() => {
+        dispatch(getTeachingData(userId));
+    }, [dispatch, userId]);
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
@@ -32,31 +44,51 @@ const UploadedCourses = () => {
                 <Container style={{ marginTop: 50 }}>
                     <div className="pageHeading">Uploaded Courses</div>
                     <Divider style={{ marginBottom: 30 }} />
-                    <div className="searchDiv">
-                        <div className="searchBar">
-                            <SearchIcon
-                                className="searchIcon"
-                                style={{ fontSize: 30 }}
-                            />
-                            <Input
-                                className={classes.searchInput}
-                                value={searchValue}
-                                disableUnderline={true}
-                                placeholder="Search..."
-                                autoFocus
-                                onChange={handleSearch}
-                                fullWidth
-                            />
+                    {isLoading ? (
+                        <div
+                            style={{
+                                width: "100%",
+                                marginTop: 50,
+                                display: "flex",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <CircularProgress style={{ color: "#00a4ef" }} />
                         </div>
-                    </div>
-                    <CourseCard
-                        textColor="#00a4ef"
-                        courseTitle="Course Title"
-                        courseDesc="Course Description"
-                        courseTags={[]}
-                        bgColor="#d5e7f0"
-                        courseId="xyz"
-                    />
+                    ) : uploadedCourses.length === 0 ? (
+                        <NoData fontColor="#00a4ef" />
+                    ) : (
+                        <div>
+                            <div className="searchDiv">
+                                <div className="searchBar">
+                                    <SearchIcon
+                                        className="searchIcon"
+                                        style={{ fontSize: 30 }}
+                                    />
+                                    <Input
+                                        className={classes.searchInput}
+                                        value={searchValue}
+                                        disableUnderline={true}
+                                        placeholder="Search..."
+                                        autoFocus
+                                        onChange={handleSearch}
+                                        fullWidth
+                                    />
+                                </div>
+                            </div>
+                            {uploadedCourses.map((course) => (
+                                <CourseCard
+                                    textColor="#00a4ef"
+                                    courseTitle={course.title}
+                                    courseDesc={course.desc}
+                                    courseTags={course.tagArray}
+                                    bgColor="#d5e7f0"
+                                    courseId={course.courseId}
+                                    key={course.courseId}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </Container>
             </div>
         </div>

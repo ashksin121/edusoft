@@ -4,7 +4,7 @@ import {
     Route,
     Redirect,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./App.css";
 import { app } from "./firebase";
@@ -20,14 +20,22 @@ import AddCourse from "./features/teach/AddCourse";
 import RejectedCourses from "./features/teach/RejectedCourses";
 import TeachMain from "./features/teach/TeachMain";
 import UploadedCourses from "./features/teach/UploadedCourses";
+import { logIn } from "./features/profile/profileSlice";
 
 function App() {
-    const authToken = localStorage.getItem("userId");
+    const dispatch = useDispatch();
+
     const userId = useSelector((state) => state.profile.userId);
+
+    const authToken = localStorage.getItem("userId");
+
+    if (authToken) {
+        dispatch(logIn(authToken));
+    }
 
     return (
         <div className="App">
-            {userId ? (
+            {authToken ? (
                 <Router>
                     <Switch>
                         <Route exact path="/learn" component={LearnMain} />

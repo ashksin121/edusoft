@@ -97,7 +97,7 @@ const LandingPage = () => {
                 password
             );
             console.log(userCredential.user);
-            dispatch(logIn(userCredential.user));
+            dispatch(logIn(userCredential.user.uid));
             history.push("/learn");
         } catch (e) {
             setIsLoading(false);
