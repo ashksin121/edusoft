@@ -21,6 +21,8 @@ import RejectedCourses from "./features/teach/RejectedCourses";
 import TeachMain from "./features/teach/TeachMain";
 import UploadedCourses from "./features/teach/UploadedCourses";
 import { logIn } from "./features/profile/profileSlice";
+import { getTeachingData } from "./features/teach/teachSlice";
+import { getLearningData } from "./features/learn/learnSlice";
 
 function App() {
     const dispatch = useDispatch();
@@ -31,6 +33,8 @@ function App() {
 
     if (authToken) {
         dispatch(logIn(authToken));
+        dispatch(getTeachingData(authToken));
+        dispatch(getLearningData(authToken));
     }
 
     return (

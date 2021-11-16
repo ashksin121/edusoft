@@ -2,7 +2,7 @@ import React from "react";
 import { Container } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import { useHistory } from "react-router-dom";
 
 import "./Learn.css";
@@ -33,8 +33,8 @@ const LearnMain = () => {
                             history.push("/learn/pendingCourses");
                         }}
                     >
-                        <CancelIcon
-                            style={{ color: "#9b2505", fontSize: 170 }}
+                        <PendingActionsIcon
+                            style={{ color: "#926900", fontSize: 170 }}
                         />
                         <div className="cardTitle">Pending Courses</div>
                     </div>

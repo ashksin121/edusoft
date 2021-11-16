@@ -9,6 +9,7 @@ const initialState = {
     email: "",
     userId: "",
     coins: 0,
+    isLoading: false,
 };
 
 export const profileSlice = createSlice({
@@ -27,11 +28,14 @@ export const profileSlice = createSlice({
             state.userId = "";
             state.coins = 0;
         },
+        setIsLoading: (state, action) => {
+            state.isLoading = action.payload;
+        },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { resetProfile, setProfile } = profileSlice.actions;
+export const { resetProfile, setIsLoading, setProfile } = profileSlice.actions;
 
 export default profileSlice.reducer;
 
@@ -45,6 +49,7 @@ export const signUp = (userData) => {
             completedCourses: [],
             pendingCourses: [],
             uploadedCourses: [],
+            answersMap: {},
         });
         localStorage.setItem("userId", userData.user.uid);
         dispatch(
@@ -60,6 +65,7 @@ export const signUp = (userData) => {
 
 export const logIn = (userId) => {
     return async (dispatch) => {
+        dispatch(setIsLoading(true));
         console.log(userId);
         const docRef = doc(db, "users", userId);
         const docSnap = await getDoc(docRef);
@@ -76,6 +82,7 @@ export const logIn = (userId) => {
                     userId: userData.userId,
                 })
             );
+            dispatch(setIsLoading(false));
         } else {
             throw new Error("Data not found");
         }
