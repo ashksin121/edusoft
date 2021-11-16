@@ -1,0 +1,14 @@
+.cardTitle {
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.cardDesc {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.cardButtonBar {
+    width: 100%;
+    margin: 50px 0 20px 0;
+}
