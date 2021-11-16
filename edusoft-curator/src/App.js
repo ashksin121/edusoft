@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./App.css";
+import { app } from "./firebase";
 import Dashboard from "./features/dashboard/Dashboard";
 import Header from "./utils/header/Header";
 

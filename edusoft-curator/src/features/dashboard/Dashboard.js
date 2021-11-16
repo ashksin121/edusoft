@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     CircularProgress,
@@ -23,10 +23,20 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { toast } from "react-toastify";
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    setDoc,
+    where,
+} from "@firebase/firestore";
 
 import "./Dashboard.css";
 import NoData from "../../utils/noData/NoData";
 import UploadedDocumentCard from "../../utils/uploadedDocumentCard/UploadedDocumentCard";
+import { db } from "../../firebase";
 
 const useStyles = makeStyles({
     searchInput: {
@@ -75,21 +85,39 @@ const Dashboard = () => {
     const classes = useStyles();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [allCourses, setAllCourses] = useState([""]);
-    const [searchValue, setSearchValue] = useState([]);
+    const [allCourses, setAllCourses] = useState([]);
+    const [searchValue, setSearchValue] = useState("");
     const [openAccept, setOpenAccept] = useState(false);
     const [openReject, setOpenReject] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
     const [acceptPoints, setAcceptPoints] = useState("");
     const [rejectRemarks, setRejectRemarks] = useState("");
+    const [selectedCourseId, setSelectedCourseId] = useState("");
+    const [instructorId, setInstructorId] = useState("");
+    const [reload, setReload] = useState(true);
 
-    const tags = [
-        { key: 0, label: "Angular" },
-        { key: 1, label: "jQuery" },
-        { key: 2, label: "Polymer" },
-        { key: 3, label: "React" },
-        { key: 4, label: "Vue.js" },
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            const q = query(
+                collection(db, "courses"),
+                where("status", "==", "REVIEW")
+            );
+            const querySnaphot = await getDocs(q);
+            let courses = [];
+            querySnaphot.forEach((doc) => {
+                let courseData = doc.data();
+                courseData.courseId = doc.id;
+                courses.push(courseData);
+            });
+            setAllCourses(courses);
+        };
+
+        setIsLoading(true);
+        fetchData();
+        setIsLoading(false);
+    }, [setIsLoading, reload]);
+
+    console.log(allCourses);
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
@@ -98,11 +126,14 @@ const Dashboard = () => {
     const handleClose = () => {
         setOpenReject(false);
         setOpenAccept(false);
+        setIsUpdate(false);
         setAcceptPoints("");
         setRejectRemarks("");
+        setSelectedCourseId("");
+        setInstructorId("");
     };
 
-    const handleCourseAccept = () => {
+    const handleCourseAccept = async () => {
         setIsUpdate(true);
         if (
             acceptPoints === "" ||
@@ -115,9 +146,22 @@ const Dashboard = () => {
             setIsUpdate(false);
             return;
         }
+        const docRef = doc(db, "users", instructorId);
+        const docSnap = await getDoc(docRef);
+        const userData = docSnap.data();
+        let coins = userData.coins;
+        coins = coins + parseInt(acceptPoints);
+
+        const dataRef = doc(db, "courses", selectedCourseId);
+        setDoc(dataRef, { status: "ACCEPTED" }, { merge: true });
+
+        const userRef = doc(db, "users", instructorId);
+        setDoc(userRef, { coins: coins }, { merge: true });
+        setReload(!reload);
+        handleClose();
     };
 
-    const handleCourseReject = () => {
+    const handleCourseReject = async () => {
         setIsUpdate(true);
         if (rejectRemarks === "") {
             toast.error("Invalid Comments", {
@@ -126,6 +170,15 @@ const Dashboard = () => {
             setIsUpdate(false);
             return;
         }
+
+        const dataRef = doc(db, "courses", selectedCourseId);
+        setDoc(
+            dataRef,
+            { status: "REJECTED", rejectRemarks: rejectRemarks },
+            { merge: true }
+        );
+        setReload(!reload);
+        handleClose();
     };
 
     return (
@@ -163,89 +216,155 @@ const Dashboard = () => {
                                 />
                             </div>
                         </div>
-                        <Accordion style={{ marginBottom: 50 }}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <div className="cardTitle">Accordion 1</div>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <div className="cardDesc">
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Suspendisse malesuada lacus
-                                    ex, sit amet blandit leo lobortis eget.
-                                </div>
-                                <Paper
-                                    sx={{
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        listStyle: "none",
-                                        padding: 0,
-                                        backgroundColor: "transparent",
-                                    }}
-                                    component="ul"
-                                    elevation={0}
-                                    style={{ marginBottom: 20 }}
+                        {allCourses
+                            .filter((course) => {
+                                let re = new RegExp(searchValue, "gi");
+                                if (searchValue === "") {
+                                    return true;
+                                }
+                                let allCheck = true;
+                                allCheck =
+                                    re.test(course.title) ||
+                                    re.test(course.desc);
+                                course.tagArray.forEach((tag) => {
+                                    allCheck = allCheck || re.test(tag.label);
+                                });
+                                return allCheck;
+                            })
+                            .map((course, idx) => (
+                                <Accordion
+                                    style={{ marginBottom: 50 }}
+                                    key={idx}
                                 >
-                                    {tags.map((data) => {
-                                        return (
-                                            <ListItem key={data.key}>
-                                                <Chip label={data.label} />
-                                            </ListItem>
-                                        );
-                                    })}
-                                </Paper>
-                                <Grid
-                                    container
-                                    spacing={2}
-                                    style={{ marginBottom: 20 }}
-                                >
-                                    <Grid item xs={12} sm={6} md={3}>
-                                        <UploadedDocumentCard
-                                            cardTitle={`File 1`}
-                                            fileData="NA"
-                                            onClick={() => {}}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <div className="cardButtonBar">
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6} md={6}>
-                                            <Button
-                                                variant="contained"
-                                                startIcon={<CheckCircleIcon />}
-                                                style={{
-                                                    width: "100%",
-                                                    backgroundColor: "#7fba00",
-                                                }}
-                                                onClick={() => {
-                                                    setOpenAccept(true);
-                                                }}
-                                            >
-                                                Accept
-                                            </Button>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        <div className="cardTitle">
+                                            {course.title}
+                                        </div>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <div className="cardDesc">
+                                            {course.desc}
+                                        </div>
+                                        <Paper
+                                            sx={{
+                                                display: "flex",
+                                                flexWrap: "wrap",
+                                                listStyle: "none",
+                                                padding: 0,
+                                                backgroundColor: "transparent",
+                                            }}
+                                            component="ul"
+                                            elevation={0}
+                                            style={{ marginBottom: 20 }}
+                                        >
+                                            {course.tagArray.map((data) => {
+                                                return (
+                                                    <ListItem key={data.key}>
+                                                        <Chip
+                                                            label={data.label}
+                                                        />
+                                                    </ListItem>
+                                                );
+                                            })}
+                                        </Paper>
+                                        <Grid
+                                            container
+                                            spacing={2}
+                                            style={{ marginBottom: 20 }}
+                                        >
+                                            {course.fileUrl.map(
+                                                (file, indx) => (
+                                                    <Grid
+                                                        item
+                                                        xs={12}
+                                                        sm={6}
+                                                        md={3}
+                                                        key={indx}
+                                                    >
+                                                        <UploadedDocumentCard
+                                                            cardTitle={`File ${
+                                                                indx + 1
+                                                            }`}
+                                                            fileData="NA"
+                                                            onClick={() => {
+                                                                window.open(
+                                                                    file
+                                                                );
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                )
+                                            )}
                                         </Grid>
-                                        <Grid item xs={12} sm={6} md={6}>
-                                            <Button
-                                                variant="contained"
-                                                startIcon={<CancelIcon />}
-                                                style={{
-                                                    width: "100%",
-                                                    backgroundColor: "#f25022",
-                                                }}
-                                                onClick={() => {
-                                                    setOpenReject(true);
-                                                }}
-                                            >
-                                                Reject
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </div>
-                            </AccordionDetails>
-                        </Accordion>
+                                        <div className="cardButtonBar">
+                                            <Grid container spacing={2}>
+                                                <Grid
+                                                    item
+                                                    xs={12}
+                                                    sm={6}
+                                                    md={6}
+                                                >
+                                                    <Button
+                                                        variant="contained"
+                                                        startIcon={
+                                                            <CheckCircleIcon />
+                                                        }
+                                                        style={{
+                                                            width: "100%",
+                                                            backgroundColor:
+                                                                "#7fba00",
+                                                        }}
+                                                        onClick={() => {
+                                                            setInstructorId(
+                                                                course.instructorId
+                                                            );
+                                                            setSelectedCourseId(
+                                                                course.courseId
+                                                            );
+                                                            setOpenAccept(true);
+                                                        }}
+                                                    >
+                                                        Accept
+                                                    </Button>
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={12}
+                                                    sm={6}
+                                                    md={6}
+                                                >
+                                                    <Button
+                                                        variant="contained"
+                                                        startIcon={
+                                                            <CancelIcon />
+                                                        }
+                                                        style={{
+                                                            width: "100%",
+                                                            backgroundColor:
+                                                                "#f25022",
+                                                        }}
+                                                        onClick={() => {
+                                                            setInstructorId(
+                                                                course.instructorId
+                                                            );
+                                                            setSelectedCourseId(
+                                                                course.courseId
+                                                            );
+                                                            setOpenReject(true);
+                                                        }}
+                                                    >
+                                                        Reject
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </AccordionDetails>
+                                </Accordion>
+                            ))}
                     </div>
                 )}
             </Container>
