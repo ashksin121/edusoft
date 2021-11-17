@@ -61,10 +61,9 @@ const Session = () => {
             allCheck = false;
         }
         if (
-            sessionDate === null
-            // ||
-            // sessionStartTime === null ||
-            // sessionEndTime === null
+            sessionDate === null ||
+            sessionStartTime === null ||
+            sessionEndTime === null
         ) {
             allCheck = false;
         }
