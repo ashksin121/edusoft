@@ -1,0 +1,26 @@
+.sessionButton {
+    background-color: black;
+    font-weight: bold;
+    color: #ffb901;
+    border-radius: 20px;
+    font-size: 16px;
+    font-family: "Quicksand", sans-serif;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.sessionButton:hover {
+    background-color: #ffb901;
+    color: black;
+}
+
+@media (max-width: 650px) {
+    .sessionButton {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

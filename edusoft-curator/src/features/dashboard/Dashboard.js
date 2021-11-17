@@ -37,6 +37,7 @@ import "./Dashboard.css";
 import NoData from "../../utils/noData/NoData";
 import UploadedDocumentCard from "../../utils/uploadedDocumentCard/UploadedDocumentCard";
 import { db } from "../../firebase";
+import Header from "../../utils/header/Header";
 
 const useStyles = makeStyles({
     searchInput: {
@@ -182,275 +183,289 @@ const Dashboard = () => {
     };
 
     return (
-        <div style={{ width: "100%" }}>
-            <Container style={{ marginTop: 50 }}>
-                {isLoading ? (
-                    <div
-                        style={{
-                            width: "100%",
-                            marginTop: 50,
-                            display: "flex",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <CircularProgress style={{ color: "#00a4ef" }} />
-                    </div>
-                ) : allCourses.length === 0 ? (
-                    <NoData fontColor="#00a4ef" />
-                ) : (
-                    <div className={classes.divStyle}>
-                        <div className="searchDiv">
-                            <div className="searchBar">
-                                <SearchIcon
-                                    className="searchIcon"
-                                    style={{ fontSize: 30 }}
-                                />
-                                <Input
-                                    className={classes.searchInput}
-                                    value={searchValue}
-                                    disableUnderline={true}
-                                    placeholder="Search..."
-                                    autoFocus
-                                    onChange={handleSearch}
-                                    fullWidth
-                                />
-                            </div>
+        <div className="appBody">
+            <Header headerUrl="courses" />
+            <div style={{ width: "100%" }}>
+                <Container style={{ marginTop: 50 }}>
+                    {isLoading ? (
+                        <div
+                            style={{
+                                width: "100%",
+                                marginTop: 50,
+                                display: "flex",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <CircularProgress style={{ color: "#00a4ef" }} />
                         </div>
-                        {allCourses
-                            .filter((course) => {
-                                let re = new RegExp(searchValue, "gi");
-                                if (searchValue === "") {
-                                    return true;
-                                }
-                                let allCheck = true;
-                                allCheck =
-                                    re.test(course.title) ||
-                                    re.test(course.desc);
-                                course.tagArray.forEach((tag) => {
-                                    allCheck = allCheck || re.test(tag.label);
-                                });
-                                return allCheck;
-                            })
-                            .map((course, idx) => (
-                                <Accordion
-                                    style={{ marginBottom: 50 }}
-                                    key={idx}
-                                >
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
+                    ) : allCourses.length === 0 ? (
+                        <NoData fontColor="#00a4ef" />
+                    ) : (
+                        <div className={classes.divStyle}>
+                            <div className="searchDiv">
+                                <div className="searchBar">
+                                    <SearchIcon
+                                        className="searchIcon"
+                                        style={{ fontSize: 30 }}
+                                    />
+                                    <Input
+                                        className={classes.searchInput}
+                                        value={searchValue}
+                                        disableUnderline={true}
+                                        placeholder="Search..."
+                                        autoFocus
+                                        onChange={handleSearch}
+                                        fullWidth
+                                    />
+                                </div>
+                            </div>
+                            {allCourses
+                                .filter((course) => {
+                                    let re = new RegExp(searchValue, "gi");
+                                    if (searchValue === "") {
+                                        return true;
+                                    }
+                                    let allCheck = true;
+                                    allCheck =
+                                        re.test(course.title) ||
+                                        re.test(course.desc);
+                                    course.tagArray.forEach((tag) => {
+                                        allCheck =
+                                            allCheck || re.test(tag.label);
+                                    });
+                                    return allCheck;
+                                })
+                                .map((course, idx) => (
+                                    <Accordion
+                                        style={{ marginBottom: 50 }}
+                                        key={idx}
                                     >
-                                        <div className="cardTitle">
-                                            {course.title}
-                                        </div>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <div className="cardDesc">
-                                            {course.desc}
-                                        </div>
-                                        <Paper
-                                            sx={{
-                                                display: "flex",
-                                                flexWrap: "wrap",
-                                                listStyle: "none",
-                                                padding: 0,
-                                                backgroundColor: "transparent",
-                                            }}
-                                            component="ul"
-                                            elevation={0}
-                                            style={{ marginBottom: 20 }}
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
                                         >
-                                            {course.tagArray.map((data) => {
-                                                return (
-                                                    <ListItem key={data.key}>
-                                                        <Chip
-                                                            label={data.label}
-                                                        />
-                                                    </ListItem>
-                                                );
-                                            })}
-                                        </Paper>
-                                        <Grid
-                                            container
-                                            spacing={2}
-                                            style={{ marginBottom: 20 }}
-                                        >
-                                            {course.fileUrl.map(
-                                                (file, indx) => (
+                                            <div className="cardTitle">
+                                                {course.title}
+                                            </div>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <div className="cardDesc">
+                                                {course.desc}
+                                            </div>
+                                            <Paper
+                                                sx={{
+                                                    display: "flex",
+                                                    flexWrap: "wrap",
+                                                    listStyle: "none",
+                                                    padding: 0,
+                                                    backgroundColor:
+                                                        "transparent",
+                                                }}
+                                                component="ul"
+                                                elevation={0}
+                                                style={{ marginBottom: 20 }}
+                                            >
+                                                {course.tagArray.map((data) => {
+                                                    return (
+                                                        <ListItem
+                                                            key={data.key}
+                                                        >
+                                                            <Chip
+                                                                label={
+                                                                    data.label
+                                                                }
+                                                            />
+                                                        </ListItem>
+                                                    );
+                                                })}
+                                            </Paper>
+                                            <Grid
+                                                container
+                                                spacing={2}
+                                                style={{ marginBottom: 20 }}
+                                            >
+                                                {course.fileUrl.map(
+                                                    (file, indx) => (
+                                                        <Grid
+                                                            item
+                                                            xs={12}
+                                                            sm={6}
+                                                            md={3}
+                                                            key={indx}
+                                                        >
+                                                            <UploadedDocumentCard
+                                                                cardTitle={`File ${
+                                                                    indx + 1
+                                                                }`}
+                                                                fileData="NA"
+                                                                onClick={() => {
+                                                                    window.open(
+                                                                        file
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </Grid>
+                                                    )
+                                                )}
+                                            </Grid>
+                                            <div className="cardButtonBar">
+                                                <Grid container spacing={2}>
                                                     <Grid
                                                         item
                                                         xs={12}
                                                         sm={6}
-                                                        md={3}
-                                                        key={indx}
+                                                        md={6}
                                                     >
-                                                        <UploadedDocumentCard
-                                                            cardTitle={`File ${
-                                                                indx + 1
-                                                            }`}
-                                                            fileData="NA"
+                                                        <Button
+                                                            variant="contained"
+                                                            startIcon={
+                                                                <CheckCircleIcon />
+                                                            }
+                                                            style={{
+                                                                width: "100%",
+                                                                backgroundColor:
+                                                                    "#7fba00",
+                                                            }}
                                                             onClick={() => {
-                                                                window.open(
-                                                                    file
+                                                                setInstructorId(
+                                                                    course.instructorId
+                                                                );
+                                                                setSelectedCourseId(
+                                                                    course.courseId
+                                                                );
+                                                                setOpenAccept(
+                                                                    true
                                                                 );
                                                             }}
-                                                        />
+                                                        >
+                                                            Accept
+                                                        </Button>
                                                     </Grid>
-                                                )
-                                            )}
-                                        </Grid>
-                                        <div className="cardButtonBar">
-                                            <Grid container spacing={2}>
-                                                <Grid
-                                                    item
-                                                    xs={12}
-                                                    sm={6}
-                                                    md={6}
-                                                >
-                                                    <Button
-                                                        variant="contained"
-                                                        startIcon={
-                                                            <CheckCircleIcon />
-                                                        }
-                                                        style={{
-                                                            width: "100%",
-                                                            backgroundColor:
-                                                                "#7fba00",
-                                                        }}
-                                                        onClick={() => {
-                                                            setInstructorId(
-                                                                course.instructorId
-                                                            );
-                                                            setSelectedCourseId(
-                                                                course.courseId
-                                                            );
-                                                            setOpenAccept(true);
-                                                        }}
+                                                    <Grid
+                                                        item
+                                                        xs={12}
+                                                        sm={6}
+                                                        md={6}
                                                     >
-                                                        Accept
-                                                    </Button>
+                                                        <Button
+                                                            variant="contained"
+                                                            startIcon={
+                                                                <CancelIcon />
+                                                            }
+                                                            style={{
+                                                                width: "100%",
+                                                                backgroundColor:
+                                                                    "#f25022",
+                                                            }}
+                                                            onClick={() => {
+                                                                setInstructorId(
+                                                                    course.instructorId
+                                                                );
+                                                                setSelectedCourseId(
+                                                                    course.courseId
+                                                                );
+                                                                setOpenReject(
+                                                                    true
+                                                                );
+                                                            }}
+                                                        >
+                                                            Reject
+                                                        </Button>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid
-                                                    item
-                                                    xs={12}
-                                                    sm={6}
-                                                    md={6}
-                                                >
-                                                    <Button
-                                                        variant="contained"
-                                                        startIcon={
-                                                            <CancelIcon />
-                                                        }
-                                                        style={{
-                                                            width: "100%",
-                                                            backgroundColor:
-                                                                "#f25022",
-                                                        }}
-                                                        onClick={() => {
-                                                            setInstructorId(
-                                                                course.instructorId
-                                                            );
-                                                            setSelectedCourseId(
-                                                                course.courseId
-                                                            );
-                                                            setOpenReject(true);
-                                                        }}
-                                                    >
-                                                        Reject
-                                                    </Button>
-                                                </Grid>
-                                            </Grid>
-                                        </div>
-                                    </AccordionDetails>
-                                </Accordion>
-                            ))}
-                    </div>
-                )}
-            </Container>
-            <Dialog
-                open={openAccept}
-                onClose={handleClose}
-                className={classes.dialogStyles}
-            >
-                <DialogTitle>Accept Course</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Accept the course if you like the course contents
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Points for acceptance"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                        placeholder="Give points out of 10"
-                        value={acceptPoints}
-                        onChange={(e) => {
-                            setAcceptPoints(e.target.value);
-                        }}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    {isUpdate ? (
-                        <CircularProgress />
-                    ) : (
-                        <div>
-                            <Button onClick={handleClose}>Cancel</Button>
-                            <Button
-                                onClick={handleCourseAccept}
-                                style={{ color: "#7fba00" }}
-                            >
-                                Accept
-                            </Button>
+                                            </div>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                ))}
                         </div>
                     )}
-                </DialogActions>
-            </Dialog>
-            <Dialog
-                open={openReject}
-                onClose={handleClose}
-                className={classes.dialogStyles}
-            >
-                <DialogTitle>Reject Course</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Reject course if the course material is not appropriate
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Reason for rejection"
-                        type="number"
-                        fullWidth
-                        variant="outlined"
-                        multiline
-                        rows={5}
-                        value={rejectRemarks}
-                        onChange={(e) => {
-                            setRejectRemarks(e.target.value);
-                        }}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    {isUpdate ? (
-                        <CircularProgress />
-                    ) : (
-                        <div>
-                            <Button onClick={handleClose}>Cancel</Button>
-                            <Button
-                                onClick={handleCourseReject}
-                                style={{ color: "#f25022" }}
-                            >
-                                Reject
-                            </Button>
-                        </div>
-                    )}
-                </DialogActions>
-            </Dialog>
+                </Container>
+                <Dialog
+                    open={openAccept}
+                    onClose={handleClose}
+                    className={classes.dialogStyles}
+                >
+                    <DialogTitle>Accept Course</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Accept the course if you like the course contents
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Points for acceptance"
+                            type="number"
+                            fullWidth
+                            variant="standard"
+                            placeholder="Give points out of 10"
+                            value={acceptPoints}
+                            onChange={(e) => {
+                                setAcceptPoints(e.target.value);
+                            }}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        {isUpdate ? (
+                            <CircularProgress />
+                        ) : (
+                            <div>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button
+                                    onClick={handleCourseAccept}
+                                    style={{ color: "#7fba00" }}
+                                >
+                                    Accept
+                                </Button>
+                            </div>
+                        )}
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={openReject}
+                    onClose={handleClose}
+                    className={classes.dialogStyles}
+                >
+                    <DialogTitle>Reject Course</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Reject course if the course material is not
+                            appropriate
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Reason for rejection"
+                            type="number"
+                            fullWidth
+                            variant="outlined"
+                            multiline
+                            rows={5}
+                            value={rejectRemarks}
+                            onChange={(e) => {
+                                setRejectRemarks(e.target.value);
+                            }}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        {isUpdate ? (
+                            <CircularProgress />
+                        ) : (
+                            <div>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button
+                                    onClick={handleCourseReject}
+                                    style={{ color: "#f25022" }}
+                                >
+                                    Reject
+                                </Button>
+                            </div>
+                        )}
+                    </DialogActions>
+                </Dialog>
+            </div>
         </div>
     );
 };

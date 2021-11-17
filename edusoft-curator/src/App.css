@@ -33,3 +33,18 @@
 .searchIcon {
     font-size: 40px;
 }
+
+.pageHeading {
+    font-size: 45px;
+    font-weight: 900;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 650px) {
+    .pageHeading {
+        display: inline;
+        margin-bottom: 10px;
+    }
+}
