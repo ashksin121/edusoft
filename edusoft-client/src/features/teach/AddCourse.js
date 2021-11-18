@@ -23,6 +23,7 @@ import { addDoc, collection } from "@firebase/firestore";
 import Header from "../../utils/header/Header";
 import UploadedDocumentCard from "../../utils/uploadedDocumentCard/UploadedDocumentCard";
 import { db } from "../../firebase";
+import Footer from "../../utils/footer/Footer";
 
 const ListItem = styled("li")(({ theme }) => ({
     margin: theme.spacing(0.5),
@@ -210,7 +211,7 @@ const AddCourse = () => {
     return (
         <div className="appBody">
             <Header headerUrl="teach" />
-            <div style={{ width: "100%" }}>
+            <div className="appContents">
                 <Container style={{ paddingTop: 50 }}>
                     <div className="pageHeading">Add New Course</div>
                     <Divider style={{ marginBottom: 30 }} />
@@ -448,6 +449,9 @@ const AddCourse = () => {
                                 backgroundColor: "#7fba00",
                                 marginBottom: 50,
                                 marginTop: 20,
+                                borderRadius: 25,
+                                fontFamily: "Quicksand, sans-serif",
+                                fontWeight: "bold",
                             }}
                             onClick={handleSubmit}
                         >
@@ -456,6 +460,7 @@ const AddCourse = () => {
                     )}
                 </Container>
             </div>
+            <Footer headerUrl="teach" />
         </div>
     );
 };

@@ -9,6 +9,7 @@ import Header from "../../utils/header/Header";
 import CourseCard from "../../utils/courseCard/CourseCard";
 import { getLearningData } from "./learnSlice";
 import NoData from "../../utils/noData/NoData";
+import Footer from "../../utils/footer/Footer";
 
 const useStyles = makeStyles({
     searchInput: {
@@ -41,7 +42,7 @@ const AllCourses = () => {
     return (
         <div className="appBody">
             <Header headerUrl="learn" />
-            <div style={{ width: "100%" }}>
+            <div className="appContents">
                 <Container style={{ marginTop: 50 }}>
                     <div className="pageHeading">All Courses</div>
                     <Divider style={{ marginBottom: 30 }} />
@@ -77,21 +78,38 @@ const AllCourses = () => {
                                     />
                                 </div>
                             </div>
-                            {allCourses.map((course) => (
-                                <CourseCard
-                                    textColor="#00a4ef"
-                                    courseTitle={course.title}
-                                    courseDesc={course.desc}
-                                    courseTags={course.tagArray}
-                                    bgColor="#d5e7f0"
-                                    courseId={course.courseId}
-                                    key={course.courseId}
-                                />
-                            ))}
+                            {allCourses
+                                .filter((course) => {
+                                    let re = new RegExp(searchValue, "gi");
+                                    if (searchValue === "") {
+                                        return true;
+                                    }
+                                    let allCheck = true;
+                                    allCheck =
+                                        re.test(course.title) ||
+                                        re.test(course.desc);
+                                    course.tagArray.forEach((tag) => {
+                                        allCheck =
+                                            allCheck || re.test(tag.label);
+                                    });
+                                    return allCheck;
+                                })
+                                .map((course) => (
+                                    <CourseCard
+                                        textColor="#00a4ef"
+                                        courseTitle={course.title}
+                                        courseDesc={course.desc}
+                                        courseTags={course.tagArray}
+                                        bgColor="#d5e7f0"
+                                        courseId={course.courseId}
+                                        key={course.courseId}
+                                    />
+                                ))}
                         </div>
                     )}
                 </Container>
             </div>
+            <Footer headerUrl="learn" />
         </div>
     );
 };

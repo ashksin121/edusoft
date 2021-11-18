@@ -44,6 +44,7 @@ export const getTeachingData = (userId) => {
         let rejectedCourses = [];
         querySnapshot.forEach((doc) => {
             let courseData = doc.data();
+            console.log("Course:", courseData);
             courseData.courseId = doc.id;
             if (courseData.status === "REVIEW") {
                 uploadedCourses.push(courseData);

@@ -9,6 +9,7 @@ const initialState = {
     email: "",
     userId: "",
     coins: 0,
+    bookedSessions: [],
     isLoading: false,
 };
 
@@ -21,12 +22,14 @@ export const profileSlice = createSlice({
             state.email = action.payload.email;
             state.userId = action.payload.userId;
             state.coins = action.payload.coins;
+            state.bookedSessions = action.payload.bookedSessions;
         },
         resetProfile: (state) => {
             state.name = "";
             state.email = "";
             state.userId = "";
             state.coins = 0;
+            state.bookedSessions = [];
         },
         setIsLoading: (state, action) => {
             state.isLoading = action.payload;
@@ -50,6 +53,7 @@ export const signUp = (userData) => {
             pendingCourses: [],
             uploadedCourses: [],
             answersMap: {},
+            bookedSessions: [],
         });
         localStorage.setItem("userId", userData.user.uid);
         dispatch(
@@ -58,6 +62,7 @@ export const signUp = (userData) => {
                 email: userData.user.email,
                 coins: +0,
                 userId: userData.user.uid,
+                bookedSessions: [],
             })
         );
     };
@@ -80,6 +85,7 @@ export const logIn = (userId) => {
                     email: userData.email,
                     coins: userData.coins,
                     userId: userData.userId,
+                    bookedSessions: userData.bookedSessions,
                 })
             );
             dispatch(setIsLoading(false));

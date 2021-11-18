@@ -1,5 +1,5 @@
 .courseCardMain {
-    height: 200px;
+    min-height: 200px;
     width: 100%;
     border-radius: 30px;
     margin-bottom: 30px;
@@ -9,6 +9,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 .courseCardIconCont {
@@ -41,4 +42,5 @@
 .courseCardDetailsCont {
     margin-left: 30px;
     float: right;
+    width: 50px;
 }

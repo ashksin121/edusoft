@@ -24,6 +24,7 @@ import { db } from "../../firebase";
 import { logIn } from "../profile/profileSlice";
 import { getLearningData } from "../learn/learnSlice";
 import { getTeachingData } from "../teach/teachSlice";
+import Footer from "../../utils/footer/Footer";
 
 const ListItem = styled("li")(({ theme }) => ({
     margin: theme.spacing(0.5),
@@ -191,7 +192,7 @@ const CourseDetails = () => {
                     <CircularProgress />
                 </div>
             ) : (
-                <div style={{ width: "100%" }}>
+                <div className="appContents">
                     <Container>
                         <div className="courseDetailsTitleCont">
                             <div className="courseDetailsImage">
@@ -202,7 +203,8 @@ const CourseDetails = () => {
                         </div>
                         {courseData.status === "REJECTED" ? (
                             <div className="courseDetailsRejection">
-                                The course was rejected because
+                                The course was rejected because{" "}
+                                {courseData.rejectRemarks}
                             </div>
                         ) : null}
                         {courseData.status === "REVIEW" &&
@@ -326,14 +328,18 @@ const CourseDetails = () => {
                                                 label={`${
                                                     completedCoursesIds.includes(
                                                         courseId
-                                                    )
+                                                    ) ||
+                                                    userId ===
+                                                        courseData.instructorId
                                                         ? "Correct "
                                                         : ""
                                                 }Answer ${idx + 1}`}
                                                 value={
                                                     completedCoursesIds.includes(
                                                         courseId
-                                                    )
+                                                    ) ||
+                                                    userId ===
+                                                        courseData.instructorId
                                                         ? ques.answer
                                                         : answers[idx]
                                                 }
@@ -377,6 +383,9 @@ const CourseDetails = () => {
                                     backgroundColor: "#7fba00",
                                     marginBottom: 50,
                                     marginTop: 20,
+                                    borderRadius: 25,
+                                    fontFamily: "Quicksand, sans-serif",
+                                    fontWeight: "bold",
                                 }}
                                 onClick={handleEnrollToCourse}
                             >
@@ -393,6 +402,9 @@ const CourseDetails = () => {
                                     backgroundColor: "#7fba00",
                                     marginBottom: 50,
                                     marginTop: 20,
+                                    borderRadius: 25,
+                                    fontFamily: "Quicksand, sans-serif",
+                                    fontWeight: "bold",
                                 }}
                                 onClick={handleSubmitQuiz}
                             >
@@ -416,6 +428,7 @@ const CourseDetails = () => {
                     </Container>
                 </div>
             )}
+            <Footer headerUrl="none" />
         </div>
     );
 };

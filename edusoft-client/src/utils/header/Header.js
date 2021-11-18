@@ -52,6 +52,17 @@ const Header = ({ headerUrl }) => {
                             Teach
                         </div>
                         <div
+                            className="headerOption"
+                            style={{
+                                backgroundColor:
+                                    url === "session" ? "black" : "transparent",
+                                color: url === "session" ? "#ffb901" : "black",
+                            }}
+                            onClick={() => handleRoute("/session")}
+                        >
+                            Sessions
+                        </div>
+                        <div
                             className="headerAvatar"
                             onClick={() => {
                                 history.push("/profile");

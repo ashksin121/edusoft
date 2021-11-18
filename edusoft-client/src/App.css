@@ -10,16 +10,38 @@
     width: 100%;
 }
 
-.cardTitle {
-    z-index: 1;
+.appContents {
+    width: 100%;
+}
+
+.cardTitle,
+.cardIcon {
+    width: 100%;
+    height: 100%;
     position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cardTitle {
+    z-index: 10;
     color: white;
     font-weight: 900;
-    font-size: 45px;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.cardIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .allCoursesCard {
-    height: 200px;
+    height: 150px;
     width: 100%;
     background-image: linear-gradient(#00a4ef, rgb(35, 35, 255));
     border-radius: 50px;
@@ -30,10 +52,11 @@
     margin-bottom: 30px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: relative;
 }
 
 .acceptedCoursesCard {
-    height: 200px;
+    height: 150px;
     width: 100%;
     background-image: linear-gradient(#7fba00, green);
     border-radius: 50px;
@@ -44,10 +67,11 @@
     margin-bottom: 30px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: relative;
 }
 
 .rejectedCoursesCard {
-    height: 200px;
+    height: 150px;
     width: 100%;
     background-image: linear-gradient(#f25022, #9b2505);
     border-radius: 50px;
@@ -58,10 +82,11 @@
     margin-bottom: 30px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: relative;
 }
 
 .pendingCoursesCard {
-    height: 200px;
+    height: 150px;
     width: 100%;
     background-image: linear-gradient(#ffb901, #926900);
     border-radius: 50px;
@@ -72,6 +97,7 @@
     margin-bottom: 30px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: relative;
 }
 
 .quizCard {
@@ -130,4 +156,13 @@
 
 .searchIcon {
     font-size: 40px;
+}
+
+@media (max-width: 650px) {
+    .appContents {
+        margin-bottom: 100px;
+    }
+    .lowerbarCont {
+        bottom: 100px;
+    }
 }

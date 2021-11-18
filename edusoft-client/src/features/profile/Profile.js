@@ -9,6 +9,7 @@ import Header from "../../utils/header/Header";
 import { logIn, logOut } from "./profileSlice";
 import { getLearningData } from "../learn/learnSlice";
 import { getTeachingData } from "../teach/teachSlice";
+import Footer from "../../utils/footer/Footer";
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -63,7 +64,7 @@ const Profile = () => {
                     <CircularProgress />
                 </div>
             ) : (
-                <div style={{ width: "100%" }}>
+                <div className="appContents">
                     <Container style={{ marginTop: 50 }}>
                         <div className="pageHeading">{name}</div>
                         <Divider style={{ marginBottom: 30 }} />
@@ -143,7 +144,12 @@ const Profile = () => {
                         <div className="profileButtonCont">
                             <Button
                                 variant="contained"
-                                style={{ backgroundColor: "#f25022" }}
+                                style={{
+                                    backgroundColor: "#f25022",
+                                    borderRadius: 25,
+                                    fontFamily: "Quicksand, sans-serif",
+                                    fontWeight: "bold",
+                                }}
                                 onClick={handleLogout}
                             >
                                 Logout
@@ -152,6 +158,7 @@ const Profile = () => {
                     </Container>
                 </div>
             )}
+            <Footer headerUrl="profile" />
         </div>
     );
 };

@@ -23,6 +23,7 @@ import UploadedCourses from "./features/teach/UploadedCourses";
 import { logIn } from "./features/profile/profileSlice";
 import { getTeachingData } from "./features/teach/teachSlice";
 import { getLearningData } from "./features/learn/learnSlice";
+import Session from "./features/session/Session";
 
 function App() {
     const dispatch = useDispatch();
@@ -79,6 +80,7 @@ function App() {
                             path="/learn/completedCourses"
                             component={CompletedCourses}
                         />
+                        <Route exact path="/session" component={Session} />
                         <Route exact path="/profile" component={Profile} />
                         <Route
                             exact

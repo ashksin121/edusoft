@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 
 import "./Teach.css";
 import Header from "../../utils/header/Header";
+import Footer from "../../utils/footer/Footer";
 
 const TeachMain = () => {
     let history = useHistory();
@@ -16,43 +17,45 @@ const TeachMain = () => {
     return (
         <div>
             <Header headerUrl="teach" />
-            <Container>
-                <div className="teachMainCont">
-                    <div
-                        className="allCoursesCard"
-                        onClick={() => {
-                            history.push("/teach/uploadedCourses");
-                        }}
-                    >
-                        <DescriptionIcon
-                            style={{ color: "blue", fontSize: 170 }}
-                        />
-                        <div className="cardTitle">Uploaded Courses</div>
+            <div className="appContents">
+                <Container>
+                    <div className="teachMainCont">
+                        <div
+                            className="allCoursesCard"
+                            onClick={() => {
+                                history.push("/teach/uploadedCourses");
+                            }}
+                        >
+                            <DescriptionIcon
+                                style={{ color: "blue", fontSize: 130 }}
+                            />
+                            <div className="cardTitle">Uploaded Courses</div>
+                        </div>
+                        <div
+                            className="acceptedCoursesCard"
+                            onClick={() => {
+                                history.push("/teach/acceptedCourses");
+                            }}
+                        >
+                            <CheckCircleIcon
+                                style={{ color: "green", fontSize: 130 }}
+                            />
+                            <div className="cardTitle">Accepted Courses</div>
+                        </div>
+                        <div
+                            className="rejectedCoursesCard"
+                            onClick={() => {
+                                history.push("/teach/rejectedCourses");
+                            }}
+                        >
+                            <CancelIcon
+                                style={{ color: "#9b2505", fontSize: 130 }}
+                            />
+                            <div className="cardTitle">Rejected Courses</div>
+                        </div>
                     </div>
-                    <div
-                        className="acceptedCoursesCard"
-                        onClick={() => {
-                            history.push("/teach/acceptedCourses");
-                        }}
-                    >
-                        <CheckCircleIcon
-                            style={{ color: "green", fontSize: 170 }}
-                        />
-                        <div className="cardTitle">Accepted Courses</div>
-                    </div>
-                    <div
-                        className="rejectedCoursesCard"
-                        onClick={() => {
-                            history.push("/teach/rejectedCourses");
-                        }}
-                    >
-                        <CancelIcon
-                            style={{ color: "#9b2505", fontSize: 170 }}
-                        />
-                        <div className="cardTitle">Rejected Courses</div>
-                    </div>
-                </div>
-            </Container>
+                </Container>
+            </div>
             <div className="lowerbarCont">
                 <Container
                     style={{ display: "flex", justifyContent: "flex-end" }}
@@ -76,6 +79,7 @@ const TeachMain = () => {
                     </Fab>
                 </Container>
             </div>
+            <Footer headerUrl="teach" />
         </div>
     );
 };
