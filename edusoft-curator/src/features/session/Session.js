@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     AppBar,
     Button,
@@ -20,12 +20,15 @@ import DatePicker from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import TimePicker from "@mui/lab/TimePicker";
 import { isValid, isFuture, isAfter } from "date-fns";
+import { addDoc, collection, getDocs, Timestamp } from "firebase/firestore";
+import moment from "moment";
 
 import "./Session.css";
 import Header from "../../utils/header/Header";
 import NoData from "../../utils/noData/NoData";
 import SessionCard from "../../utils/sessionCard/SessionCard";
 import Footer from "../../utils/footer/Footer";
+import { db } from "../../firebase";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -43,12 +46,32 @@ const Session = () => {
     const [seatsLeft, setSeatsLeft] = useState("");
     const [sessionUrl, setSessionUrl] = useState("");
     const [isAddingSession, setIsAddingSession] = useState(false);
+    const [isReload, setIsReload] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const querySnapshot = await getDocs(collection(db, "sessions"));
+            let sessions = [];
+            querySnapshot.forEach((doc) => {
+                let sessionData = doc.data();
+                sessionData.sessionId = doc.id;
+                sessions.push(sessionData);
+            });
+            setSessions(sessions);
+        };
+
+        setIsLoading(true);
+        fetchData();
+        setIsLoading(false);
+    }, [setIsLoading, isReload]);
 
     const handleClose = () => {
+        setIsAddingSession(false);
         setIsOpen(false);
+        setIsReload(!isReload);
     };
 
-    const handleAddSession = () => {
+    const handleAddSession = async () => {
         setIsAddingSession(true);
         console.log(sessionStartTime);
         let allCheck = true;
@@ -57,7 +80,7 @@ const Session = () => {
             mentorName === "" ||
             sessionUrl === "" ||
             seatsLeft === "" ||
-            parseInt(seatsLeft) > 50
+            parseInt(seatsLeft) > 5
         ) {
             allCheck = false;
         }
@@ -84,7 +107,25 @@ const Session = () => {
             setIsAddingSession(false);
             return;
         }
+        const sessionData = {
+            sessionName: sessionName,
+            mentorName: mentorName,
+            sessionDate: Timestamp.fromDate(sessionDate),
+            sessionStartTime: Timestamp.fromDate(sessionStartTime),
+            sessionEndTime: Timestamp.fromDate(sessionEndTime),
+            seatsLeft: parseInt(seatsLeft),
+            sessionUrl: sessionUrl,
+        };
+        console.log(sessionData);
+
+        const sessionRef = await addDoc(
+            collection(db, "sessions"),
+            sessionData
+        );
+        handleClose();
     };
+
+    console.log(sessions);
 
     return (
         <div className="appBody">
@@ -120,16 +161,50 @@ const Session = () => {
                     ) : (
                         <div style={{ width: "100%" }}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <SessionCard
-                                        sessionName="Session Name"
-                                        influencerName="Influencer Name"
-                                        sessionDate="Today Date"
-                                        sessionTime="Start Time - End Time"
-                                        seatsLeft="XX"
-                                        sessionUrl="https://microsoft.acehacker.com/fte2021/index.html"
-                                    />
-                                </Grid>
+                                {sessions
+                                    .filter((session) => {
+                                        let utc = session.sessionDate.seconds;
+                                        let d = new Date(0);
+                                        d.setUTCSeconds(utc);
+                                        return (
+                                            moment(d).isAfter(
+                                                new Date(),
+                                                "day"
+                                            ) ||
+                                            moment(d).isSame(new Date(), "day")
+                                        );
+                                    })
+                                    .map((session) => (
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            sm={6}
+                                            md={4}
+                                            key={session.sessionId}
+                                        >
+                                            <SessionCard
+                                                sessionName={
+                                                    session.sessionName
+                                                }
+                                                influencerName={
+                                                    session.mentorName
+                                                }
+                                                sessionDate={
+                                                    session.sessionDate.seconds
+                                                }
+                                                sessionStartTime={
+                                                    session.sessionStartTime
+                                                        .seconds
+                                                }
+                                                sessionEndTime={
+                                                    session.sessionEndTime
+                                                        .seconds
+                                                }
+                                                seatsLeft={session.seatsLeft}
+                                                sessionUrl={session.sessionUrl}
+                                            />
+                                        </Grid>
+                                    ))}
                             </Grid>
                         </div>
                     )}
@@ -257,6 +332,7 @@ const Session = () => {
                         label="Seats Left"
                         variant="outlined"
                         fullWidth
+                        placeholder="Max seats - 5"
                         value={seatsLeft}
                         type="number"
                         onChange={(e) => {

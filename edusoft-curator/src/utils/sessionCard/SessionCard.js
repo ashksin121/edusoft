@@ -3,6 +3,7 @@ import { Button, Card, CardActions, CardContent } from "@mui/material";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import moment from "moment";
 
 import "./SessionCard.css";
 
@@ -10,7 +11,8 @@ const SessionCard = ({
     sessionName,
     influencerName,
     sessionDate,
-    sessionTime,
+    sessionStartTime,
+    sessionEndTime,
     seatsLeft,
     sessionUrl,
 }) => {
@@ -21,11 +23,12 @@ const SessionCard = ({
                 <div className="sessionCardInfluencer">- {influencerName}</div>
                 <div className="sessionCardInfo">
                     <InsertInvitationIcon style={{ marginRight: 10 }} />
-                    {sessionDate}
+                    {moment.unix(sessionDate).format("DD/MM/YYYY")}
                 </div>
                 <div className="sessionCardInfo">
                     <AccessTimeFilledIcon style={{ marginRight: 10 }} />
-                    {sessionTime}
+                    {moment.unix(sessionStartTime).format("hh:mm A")} -{" "}
+                    {moment.unix(sessionEndTime).format("hh:mm A")}
                 </div>
                 <div className="sessionCardFee">
                     <div>Fee</div>
