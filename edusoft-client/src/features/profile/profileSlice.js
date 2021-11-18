@@ -9,7 +9,7 @@ const initialState = {
     email: "",
     userId: "",
     coins: 0,
-    bookedSessions: [],
+    sessionsBooked: [],
     isLoading: false,
 };
 
@@ -22,14 +22,14 @@ export const profileSlice = createSlice({
             state.email = action.payload.email;
             state.userId = action.payload.userId;
             state.coins = action.payload.coins;
-            state.bookedSessions = action.payload.bookedSessions;
+            state.sessionsBooked = action.payload.sessionsBooked;
         },
         resetProfile: (state) => {
             state.name = "";
             state.email = "";
             state.userId = "";
             state.coins = 0;
-            state.bookedSessions = [];
+            state.sessionsBooked = [];
         },
         setIsLoading: (state, action) => {
             state.isLoading = action.payload;
@@ -53,7 +53,7 @@ export const signUp = (userData) => {
             pendingCourses: [],
             uploadedCourses: [],
             answersMap: {},
-            bookedSessions: [],
+            sessionsBooked: [],
         });
         localStorage.setItem("userId", userData.user.uid);
         dispatch(
@@ -62,7 +62,7 @@ export const signUp = (userData) => {
                 email: userData.user.email,
                 coins: +0,
                 userId: userData.user.uid,
-                bookedSessions: [],
+                sessionsBooked: [],
             })
         );
     };
@@ -85,7 +85,7 @@ export const logIn = (userId) => {
                     email: userData.email,
                     coins: userData.coins,
                     userId: userData.userId,
-                    bookedSessions: userData.bookedSessions,
+                    sessionsBooked: userData.sessionsBooked,
                 })
             );
             dispatch(setIsLoading(false));

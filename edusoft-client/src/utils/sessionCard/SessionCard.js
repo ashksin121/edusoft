@@ -3,6 +3,7 @@ import { Button, Card, CardActions, CardContent } from "@mui/material";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import moment from "moment";
 
 import "./SessionCard.css";
 
@@ -10,9 +11,13 @@ const SessionCard = ({
     sessionName,
     influencerName,
     sessionDate,
-    sessionTime,
+    sessionStartTime,
+    sessionEndTime,
     seatsLeft,
     sessionUrl,
+    userId,
+    isBooking,
+    handleClick,
 }) => {
     const handleSessionBook = () => {};
 
@@ -23,11 +28,12 @@ const SessionCard = ({
                 <div className="sessionCardInfluencer">- {influencerName}</div>
                 <div className="sessionCardInfo">
                     <InsertInvitationIcon style={{ marginRight: 10 }} />
-                    {sessionDate}
+                    {moment.unix(sessionDate).format("DD/MM/YYYY")}
                 </div>
                 <div className="sessionCardInfo">
                     <AccessTimeFilledIcon style={{ marginRight: 10 }} />
-                    {sessionTime}
+                    {moment.unix(sessionStartTime).format("hh:mm A")} -{" "}
+                    {moment.unix(sessionEndTime).format("hh:mm A")}
                 </div>
                 <div className="sessionCardFee">
                     <div>Fee</div>
@@ -41,34 +47,35 @@ const SessionCard = ({
                 </div>
             </CardContent>
             <CardActions>
-                <Button
-                    size="small"
-                    variant="ceontained"
-                    style={{
-                        backgroundColor: "#7fba00",
-                        fontWeight: "bold",
-                        color: "white",
-                        fontFamily: "Quicksand, sans-serif",
-                    }}
-                    onClick={() => {
-                        window.open(sessionUrl);
-                    }}
-                >
-                    Go To Session
-                </Button>
-                <Button
-                    size="small"
-                    variant="ceontained"
-                    style={{
-                        backgroundColor: "#7fba00",
-                        fontWeight: "bold",
-                        color: "white",
-                        fontFamily: "Quicksand, sans-serif",
-                    }}
-                    onClick={handleSessionBook}
-                >
-                    Book Now
-                </Button>
+                {isBooking ? (
+                    <Button
+                        size="small"
+                        variant="ceontained"
+                        style={{
+                            backgroundColor: "#7fba00",
+                            fontWeight: "bold",
+                            color: "white",
+                            fontFamily: "Quicksand, sans-serif",
+                        }}
+                        onClick={handleClick}
+                    >
+                        Book Now
+                    </Button>
+                ) : (
+                    <Button
+                        size="small"
+                        variant="ceontained"
+                        style={{
+                            backgroundColor: "#7fba00",
+                            fontWeight: "bold",
+                            color: "white",
+                            fontFamily: "Quicksand, sans-serif",
+                        }}
+                        onClick={handleClick}
+                    >
+                        Go To Session
+                    </Button>
+                )}
             </CardActions>
         </Card>
     );
