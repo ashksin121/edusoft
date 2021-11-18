@@ -25,6 +25,7 @@ import "./Session.css";
 import Header from "../../utils/header/Header";
 import NoData from "../../utils/noData/NoData";
 import SessionCard from "../../utils/sessionCard/SessionCard";
+import Footer from "../../utils/footer/Footer";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -88,7 +89,7 @@ const Session = () => {
     return (
         <div className="appBody">
             <Header headerUrl="session" />
-            <div style={{ width: "100%" }}>
+            <div className="appContents">
                 <Container style={{ marginTop: 50 }}>
                     <div className="pageHeading">
                         <div>Sessions</div>
@@ -276,6 +277,7 @@ const Session = () => {
                     />
                 </Container>
             </Dialog>
+            <Footer headerUrl="session" />
         </div>
     );
 };

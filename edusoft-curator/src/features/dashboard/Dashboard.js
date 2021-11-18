@@ -38,6 +38,7 @@ import NoData from "../../utils/noData/NoData";
 import UploadedDocumentCard from "../../utils/uploadedDocumentCard/UploadedDocumentCard";
 import { db } from "../../firebase";
 import Header from "../../utils/header/Header";
+import Footer from "../../utils/footer/Footer";
 
 const useStyles = makeStyles({
     searchInput: {
@@ -185,7 +186,7 @@ const Dashboard = () => {
     return (
         <div className="appBody">
             <Header headerUrl="courses" />
-            <div style={{ width: "100%" }}>
+            <div className="appContents">
                 <Container style={{ marginTop: 50 }}>
                     {isLoading ? (
                         <div
@@ -466,6 +467,7 @@ const Dashboard = () => {
                     </DialogActions>
                 </Dialog>
             </div>
+            <Footer headerUrl="courses" />
         </div>
     );
 };

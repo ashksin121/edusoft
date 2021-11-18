@@ -10,6 +10,10 @@
     width: 100%;
 }
 
+.appContents {
+    width: 100%;
+}
+
 .searchDiv {
     margin-top: 10px;
     width: 100%;
@@ -46,5 +50,8 @@
     .pageHeading {
         display: inline;
         margin-bottom: 10px;
+    }
+    .appContents {
+        margin-bottom: 100px;
     }
 }
