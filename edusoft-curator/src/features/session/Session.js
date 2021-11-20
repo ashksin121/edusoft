@@ -69,6 +69,13 @@ const Session = () => {
         setIsAddingSession(false);
         setIsOpen(false);
         setIsReload(!isReload);
+        setSessionName("");
+        setMentorName("");
+        setSessionStartTime(null);
+        setSessionEndTime(null);
+        setSessionDate(null);
+        setSeatsLeft("");
+        setSessionUrl("");
     };
 
     const handleAddSession = async () => {
@@ -107,12 +114,27 @@ const Session = () => {
             setIsAddingSession(false);
             return;
         }
+        let sessionActualDate = moment(sessionDate).format("YYYY-MM-DD");
+        let sessionActualStartTime =
+            moment(sessionStartTime).format("HH:mm:ss");
+        let sessionActualEndTime = moment(sessionEndTime).format("HH:mm:ss");
+        // console.log(
+        //     sessionActualDate,
+        //     sessionActualStartTime,
+        //     sessionActualEndTime,
+        //     new Date(sessionActualDate + " " + sessionActualStartTime),
+        //     new Date(sessionActualDate + " " + sessionActualEndTime)
+        // );
         const sessionData = {
             sessionName: sessionName,
             mentorName: mentorName,
             sessionDate: Timestamp.fromDate(sessionDate),
-            sessionStartTime: Timestamp.fromDate(sessionStartTime),
-            sessionEndTime: Timestamp.fromDate(sessionEndTime),
+            sessionStartTime: Timestamp.fromDate(
+                new Date(sessionActualDate + " " + sessionActualStartTime)
+            ),
+            sessionEndTime: Timestamp.fromDate(
+                new Date(sessionActualDate + " " + sessionActualEndTime)
+            ),
             seatsLeft: parseInt(seatsLeft),
             sessionUrl: sessionUrl,
         };
@@ -160,19 +182,18 @@ const Session = () => {
                         <NoData fontColor="#00a4ef" />
                     ) : (
                         <div style={{ width: "100%" }}>
-                            <Grid container spacing={2}>
+                            <Grid
+                                container
+                                spacing={2}
+                                style={{ marginBottom: 50 }}
+                            >
                                 {sessions
                                     .filter((session) => {
-                                        let utc = session.sessionDate.seconds;
+                                        let utc =
+                                            session.sessionEndTime.seconds;
                                         let d = new Date(0);
                                         d.setUTCSeconds(utc);
-                                        return (
-                                            moment(d).isAfter(
-                                                new Date(),
-                                                "day"
-                                            ) ||
-                                            moment(d).isSame(new Date(), "day")
-                                        );
+                                        return moment(d).isAfter(new Date());
                                     })
                                     .map((session) => (
                                         <Grid
