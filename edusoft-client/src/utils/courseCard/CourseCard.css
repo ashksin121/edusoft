@@ -44,3 +44,10 @@
     float: right;
     width: 50px;
 }
+
+@media (max-width: 650px) {
+    .courseCardIconCont,
+    .courseCardDetailsCont {
+        display: none;
+    }
+}

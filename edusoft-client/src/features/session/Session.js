@@ -18,6 +18,7 @@ const Session = () => {
     const sessionsBooked = useSelector((state) => state.profile.sessionsBooked);
     const profileLoading = useSelector((state) => state.profile.isLoading);
     const userId = useSelector((state) => state.profile.userId);
+    const coins = useSelector((state) => state.profile.coins);
 
     const [isLoading, setIsLoading] = useState(false);
     const [bookedSessions, setBookedSessions] = useState([]);
@@ -60,7 +61,11 @@ const Session = () => {
         newBookings.push(sessionId);
         const uid = userId;
         const docRef = doc(db, "users", uid);
-        setDoc(docRef, { sessionsBooked: newBookings }, { merge: true });
+        setDoc(
+            docRef,
+            { sessionsBooked: newBookings, coins: coins - 50 },
+            { merge: true }
+        );
         dispatch(logIn(uid));
         setIsReload(!isReload);
     };
@@ -173,8 +178,7 @@ const Session = () => {
                                                         .seconds
                                                 }
                                                 seatsLeft={session.seatsLeft}
-                                                sessionUrl={session.sessionUrl}
-                                                userId={userId}
+                                                userCoins={coins}
                                                 isBooking={true}
                                                 handleClick={() => {
                                                     handleBookSession(

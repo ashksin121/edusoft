@@ -59,7 +59,11 @@ export const getLearningData = (userId) => {
                     completedCourses.push(course);
                 } else if (userData.pendingCourses.includes(course.courseId)) {
                     pendingCourses.push(course);
-                } else if (course.instructorId !== userId) {
+                }
+                if (
+                    course.instructorId !== userId &&
+                    course.status === "ACCEPTED"
+                ) {
                     allCourses.push(course);
                 }
             });

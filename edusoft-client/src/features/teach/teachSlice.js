@@ -8,6 +8,8 @@ const initialState = {
     uploadedCourses: [],
     acceptedCourses: [],
     rejectedCourses: [],
+    acceptedCourseIds: [],
+    rejectedCourseIds: [],
     isLoading: false,
 };
 
@@ -22,6 +24,8 @@ export const teachSlice = createSlice({
             state.uploadedCourses = cloneDeep(action.payload.uploadedCourses);
             state.acceptedCourses = cloneDeep(action.payload.acceptedCourses);
             state.rejectedCourses = cloneDeep(action.payload.rejectedCourses);
+            state.acceptedCourseIds = action.payload.acceptedCourseIds;
+            state.rejectedCourseIds = action.payload.rejectedCourseIds;
         },
     },
 });
@@ -42,23 +46,28 @@ export const getTeachingData = (userId) => {
         let uploadedCourses = [];
         let acceptedCourses = [];
         let rejectedCourses = [];
+        let acceptedCourseIds = [];
+        let rejectedCourseIds = [];
         querySnapshot.forEach((doc) => {
             let courseData = doc.data();
             console.log("Course:", courseData);
             courseData.courseId = doc.id;
-            if (courseData.status === "REVIEW") {
-                uploadedCourses.push(courseData);
+            if (courseData.status === "REJECTED") {
+                rejectedCourses.push(courseData);
+                rejectedCourseIds.push(doc.id);
             } else if (courseData.status === "ACCEPTED") {
                 acceptedCourses.push(courseData);
-            } else {
-                rejectedCourses.push(courseData);
+                acceptedCourseIds.push(doc.id);
             }
+            uploadedCourses.push(courseData);
         });
         dispatch(
             setTeachData({
                 uploadedCourses: uploadedCourses,
                 acceptedCourses: acceptedCourses,
                 rejectedCourses: rejectedCourses,
+                acceptedCourseIds: acceptedCourseIds,
+                rejectedCourseIds: rejectedCourseIds,
             })
         );
         dispatch(setIsLoading(false));

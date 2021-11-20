@@ -29,6 +29,12 @@ const UploadedCourses = () => {
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.teach.isLoading);
     const uploadedCourses = useSelector((state) => state.teach.uploadedCourses);
+    const acceptedCourseIds = useSelector(
+        (state) => state.teach.acceptedCourseIds
+    );
+    const rejectedCourseIds = useSelector(
+        (state) => state.teach.rejectedCourseIds
+    );
 
     useEffect(() => {
         dispatch(getTeachingData(userId));
@@ -95,11 +101,31 @@ const UploadedCourses = () => {
                                 })
                                 .map((course) => (
                                     <CourseCard
-                                        textColor="#00a4ef"
+                                        textColor={
+                                            rejectedCourseIds.includes(
+                                                course.courseId
+                                            )
+                                                ? "#f25022"
+                                                : acceptedCourseIds.includes(
+                                                      course.courseId
+                                                  )
+                                                ? "#7fba00"
+                                                : "#00a4ef"
+                                        }
                                         courseTitle={course.title}
                                         courseDesc={course.desc}
                                         courseTags={course.tagArray}
-                                        bgColor="#d5e7f0"
+                                        bgColor={
+                                            rejectedCourseIds.includes(
+                                                course.courseId
+                                            )
+                                                ? "#f7d7cd"
+                                                : acceptedCourseIds.includes(
+                                                      course.courseId
+                                                  )
+                                                ? "#e0f7b0"
+                                                : "#d5e7f0"
+                                        }
                                         courseId={course.courseId}
                                         key={course.courseId}
                                     />

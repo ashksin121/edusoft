@@ -27,6 +27,12 @@ const AllCourses = () => {
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.learn.isLoading);
     const allCourses = useSelector((state) => state.learn.allCourses);
+    const pendingCoursesIds = useSelector(
+        (state) => state.learn.pendingCoursesIds
+    );
+    const completedCoursesIds = useSelector(
+        (state) => state.learn.completedCoursesIds
+    );
 
     useEffect(() => {
         dispatch(getLearningData(userId));
@@ -96,11 +102,31 @@ const AllCourses = () => {
                                 })
                                 .map((course) => (
                                     <CourseCard
-                                        textColor="#00a4ef"
+                                        textColor={
+                                            pendingCoursesIds.includes(
+                                                course.courseId
+                                            )
+                                                ? "#ffb901"
+                                                : completedCoursesIds.includes(
+                                                      course.courseId
+                                                  )
+                                                ? "#7fba00"
+                                                : "#00a4ef"
+                                        }
                                         courseTitle={course.title}
                                         courseDesc={course.desc}
                                         courseTags={course.tagArray}
-                                        bgColor="#d5e7f0"
+                                        bgColor={
+                                            pendingCoursesIds.includes(
+                                                course.courseId
+                                            )
+                                                ? "#fdf4dd"
+                                                : completedCoursesIds.includes(
+                                                      course.courseId
+                                                  )
+                                                ? "#e0f7b0"
+                                                : "#d5e7f0"
+                                        }
                                         courseId={course.courseId}
                                         key={course.courseId}
                                     />

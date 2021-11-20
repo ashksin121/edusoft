@@ -126,12 +126,40 @@
     margin-bottom: 5px;
 }
 
+.pageHeadingWithButton {
+    font-size: 45px;
+    font-weight: 900;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
 .pageSubHeading {
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 5px;
     text-align: center;
     margin-top: 50px;
+}
+
+.pageHeadingButton {
+    background-color: black;
+    font-weight: bold;
+    color: #ffb901;
+    border-radius: 20px;
+    font-size: 16px;
+    font-family: "Quicksand", sans-serif;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.pageHeadingButton:hover {
+    background-color: #ffb901;
+    color: black;
 }
 
 .searchDiv {
@@ -158,11 +186,23 @@
     font-size: 40px;
 }
 
+.lowerBtn {
+    bottom: 50px;
+}
+
 @media (max-width: 650px) {
     .appContents {
         margin-bottom: 100px;
     }
-    .lowerbarCont {
+    .lowerBtn {
         bottom: 100px;
+    }
+    .pageHeadingWithButton {
+        display: inline;
+        margin-bottom: 10px;
+    }
+    .pageHeadingButton {
+        width: 100%;
+        margin-bottom: 10px;
     }
 }

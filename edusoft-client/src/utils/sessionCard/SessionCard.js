@@ -14,13 +14,10 @@ const SessionCard = ({
     sessionStartTime,
     sessionEndTime,
     seatsLeft,
-    sessionUrl,
-    userId,
+    userCoins,
     isBooking,
     handleClick,
 }) => {
-    const handleSessionBook = () => {};
-
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
@@ -50,9 +47,11 @@ const SessionCard = ({
                 {isBooking ? (
                     <Button
                         size="small"
-                        variant="ceontained"
+                        variant="contained"
+                        disabled={userCoins < 50}
                         style={{
-                            backgroundColor: "#7fba00",
+                            backgroundColor:
+                                userCoins < 50 ? "#888" : "#7fba00",
                             fontWeight: "bold",
                             color: "white",
                             fontFamily: "Quicksand, sans-serif",
@@ -64,7 +63,7 @@ const SessionCard = ({
                 ) : (
                     <Button
                         size="small"
-                        variant="ceontained"
+                        variant="contained"
                         style={{
                             backgroundColor: "#7fba00",
                             fontWeight: "bold",
