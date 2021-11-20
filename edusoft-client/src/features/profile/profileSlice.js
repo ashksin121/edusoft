@@ -8,7 +8,7 @@ const initialState = {
     name: "",
     email: "",
     userId: "",
-    coins: 0,
+    coins: 100,
     sessionsBooked: [],
     isLoading: false,
 };
@@ -28,7 +28,7 @@ export const profileSlice = createSlice({
             state.name = "";
             state.email = "";
             state.userId = "";
-            state.coins = 0;
+            state.coins = 100;
             state.sessionsBooked = [];
         },
         setIsLoading: (state, action) => {
@@ -47,7 +47,7 @@ export const signUp = (userData) => {
         await setDoc(doc(db, "users", userData.user.uid), {
             name: userData.name,
             email: userData.user.email,
-            coins: +0,
+            coins: +100,
             userId: userData.user.uid,
             completedCourses: [],
             pendingCourses: [],

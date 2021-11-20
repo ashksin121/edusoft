@@ -33,13 +33,10 @@ const Session = () => {
             querySnapshot.forEach((doc) => {
                 let sessionData = doc.data();
                 sessionData.sessionId = doc.id;
-                let utc = sessionData.sessionDate.seconds;
+                let utc = sessionData.sessionEndTime.seconds;
                 let d = new Date(0);
                 d.setUTCSeconds(utc);
-                if (
-                    moment(d).isAfter(new Date(), "day") ||
-                    moment(d).isSame(new Date(), "day")
-                ) {
+                if (moment(d).isAfter(new Date())) {
                     if (sessionsBooked.includes(doc.id)) {
                         bookedSessions.push(sessionData);
                     } else {
