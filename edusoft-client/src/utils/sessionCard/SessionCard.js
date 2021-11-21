@@ -44,7 +44,21 @@ const SessionCard = ({
                 </div>
             </CardContent>
             <CardActions>
-                {isBooking ? (
+                {seatsLeft === 0 ? (
+                    <Button
+                        size="small"
+                        variant="contained"
+                        disabled
+                        style={{
+                            backgroundColor: "#f25022",
+                            fontWeight: "bold",
+                            color: "white",
+                            fontFamily: "Quicksand, sans-serif",
+                        }}
+                    >
+                        Booked
+                    </Button>
+                ) : isBooking ? (
                     <Button
                         size="small"
                         variant="contained"

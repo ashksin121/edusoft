@@ -53,16 +53,19 @@ const Session = () => {
         setIsLoading(false);
     }, [setIsLoading, isReload, sessionsBooked]);
 
-    const handleBookSession = (sessionId) => {
+    const handleBookSession = (sessionId, seats) => {
         let newBookings = [...sessionsBooked];
         newBookings.push(sessionId);
         const uid = userId;
+        const newSeats = seats - 1;
         const docRef = doc(db, "users", uid);
         setDoc(
             docRef,
             { sessionsBooked: newBookings, coins: coins - 50 },
             { merge: true }
         );
+        const sessionRef = doc(db, "sessions", sessionId);
+        setDoc(sessionRef, { seatsLeft: newSeats }, { merge: true });
         dispatch(logIn(uid));
         setIsReload(!isReload);
     };
@@ -179,7 +182,8 @@ const Session = () => {
                                                 isBooking={true}
                                                 handleClick={() => {
                                                     handleBookSession(
-                                                        session.sessionId
+                                                        session.sessionId,
+                                                        session.seatsLeft
                                                     );
                                                 }}
                                             />
