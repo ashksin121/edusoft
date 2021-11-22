@@ -35,6 +35,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Session = () => {
+    // Local State
     const [isLoading, setIsLoading] = useState(false);
     const [sessions, setSessions] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -78,9 +79,9 @@ const Session = () => {
         setSessionUrl("");
     };
 
+    // Allows curator to add session
     const handleAddSession = async () => {
         setIsAddingSession(true);
-        console.log(sessionStartTime);
         let allCheck = true;
         if (
             sessionName === "" ||
@@ -118,13 +119,6 @@ const Session = () => {
         let sessionActualStartTime =
             moment(sessionStartTime).format("HH:mm:ss");
         let sessionActualEndTime = moment(sessionEndTime).format("HH:mm:ss");
-        // console.log(
-        //     sessionActualDate,
-        //     sessionActualStartTime,
-        //     sessionActualEndTime,
-        //     new Date(sessionActualDate + " " + sessionActualStartTime),
-        //     new Date(sessionActualDate + " " + sessionActualEndTime)
-        // );
         const sessionData = {
             sessionName: sessionName,
             mentorName: mentorName,
@@ -138,7 +132,6 @@ const Session = () => {
             seatsLeft: parseInt(seatsLeft),
             sessionUrl: sessionUrl,
         };
-        console.log(sessionData);
 
         const sessionRef = await addDoc(
             collection(db, "sessions"),
@@ -146,8 +139,6 @@ const Session = () => {
         );
         handleClose();
     };
-
-    console.log(sessions);
 
     return (
         <div className="appBody">
@@ -231,6 +222,8 @@ const Session = () => {
                     )}
                 </Container>
             </div>
+
+            {/* Dialog for adding course */}
             <Dialog
                 fullScreen
                 open={isOpen}
@@ -281,7 +274,8 @@ const Session = () => {
                         fullWidth
                         value={sessionName}
                         onChange={(e) => {
-                            setSessionName(e.target.value);
+                            const res = e.target.value.trim();
+                            setSessionName(res);
                         }}
                         style={{ marginBottom: 50 }}
                     />
@@ -292,7 +286,8 @@ const Session = () => {
                         fullWidth
                         value={mentorName}
                         onChange={(e) => {
-                            setMentorName(e.target.value);
+                            const res = e.target.value.trim();
+                            setMentorName(res);
                         }}
                         style={{ marginBottom: 50 }}
                     />
@@ -357,7 +352,8 @@ const Session = () => {
                         value={seatsLeft}
                         type="number"
                         onChange={(e) => {
-                            setSeatsLeft(e.target.value);
+                            const res = e.target.value.trim();
+                            setSeatsLeft(res);
                         }}
                         style={{ marginBottom: 50 }}
                     />
@@ -368,7 +364,8 @@ const Session = () => {
                         fullWidth
                         value={sessionUrl}
                         onChange={(e) => {
-                            setSessionUrl(e.target.value);
+                            const res = e.target.value.trim();
+                            setSessionUrl(res);
                         }}
                         style={{ marginBottom: 50 }}
                     />

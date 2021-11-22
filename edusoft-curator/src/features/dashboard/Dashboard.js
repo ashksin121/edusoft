@@ -86,6 +86,7 @@ const ListItem = styled("li")(({ theme }) => ({
 const Dashboard = () => {
     const classes = useStyles();
 
+    // Local states
     const [isLoading, setIsLoading] = useState(false);
     const [allCourses, setAllCourses] = useState([]);
     const [searchValue, setSearchValue] = useState("");
@@ -119,10 +120,9 @@ const Dashboard = () => {
         setIsLoading(false);
     }, [setIsLoading, reload]);
 
-    console.log(allCourses);
-
     const handleSearch = (e) => {
-        setSearchValue(e.target.value);
+        const res = e.target.value.trim();
+        setSearchValue(res);
     };
 
     const handleClose = () => {
@@ -135,6 +135,7 @@ const Dashboard = () => {
         setInstructorId("");
     };
 
+    // Accpets the selected course
     const handleCourseAccept = async () => {
         setIsUpdate(true);
         if (
@@ -163,6 +164,7 @@ const Dashboard = () => {
         handleClose();
     };
 
+    // Rejects the selected course
     const handleCourseReject = async () => {
         setIsUpdate(true);
         if (rejectRemarks === "") {
@@ -220,6 +222,7 @@ const Dashboard = () => {
                                     />
                                 </div>
                             </div>
+
                             {allCourses
                                 .filter((course) => {
                                     let re = new RegExp(searchValue, "gi");
@@ -382,6 +385,8 @@ const Dashboard = () => {
                         </div>
                     )}
                 </Container>
+
+                {/* Dialog box for accepting course */}
                 <Dialog
                     open={openAccept}
                     onClose={handleClose}
@@ -403,7 +408,8 @@ const Dashboard = () => {
                             placeholder="Give points out of 10"
                             value={acceptPoints}
                             onChange={(e) => {
-                                setAcceptPoints(e.target.value);
+                                const res = e.target.value.trim();
+                                setAcceptPoints(res);
                             }}
                         />
                     </DialogContent>
@@ -423,6 +429,8 @@ const Dashboard = () => {
                         )}
                     </DialogActions>
                 </Dialog>
+
+                {/* Dialog box for rejecting course */}
                 <Dialog
                     open={openReject}
                     onClose={handleClose}
@@ -446,7 +454,8 @@ const Dashboard = () => {
                             rows={5}
                             value={rejectRemarks}
                             onChange={(e) => {
-                                setRejectRemarks(e.target.value);
+                                const res = e.target.value.trim();
+                                setRejectRemarks(res);
                             }}
                         />
                     </DialogContent>
