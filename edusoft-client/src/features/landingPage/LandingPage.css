@@ -31,7 +31,6 @@
 }
 
 .loginInfoHeading {
-    /* height: 40px; */
     text-align: left;
     letter-spacing: 0;
     color: #ffffff;
@@ -50,8 +49,7 @@
 }
 
 .loginCard {
-    width: 325px;
-    /* height: 574px; */
+    width: 400px;
     background: #ffffff 0% 0% no-repeat padding-box;
     border-radius: 4px;
     opacity: 1;

@@ -24,6 +24,7 @@ const CompletedCourses = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    // Data from redux store
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.learn.isLoading);
     const completedCourses = useSelector(
@@ -37,7 +38,8 @@ const CompletedCourses = () => {
     const [searchValue, setSearchValue] = useState("");
 
     const handleSearch = (e) => {
-        setSearchValue(e.target.value);
+        const res = e.target.value.trim();
+        setSearchValue(res);
     };
 
     return (
@@ -79,6 +81,7 @@ const CompletedCourses = () => {
                                     />
                                 </div>
                             </div>
+
                             {completedCourses
                                 .filter((course) => {
                                     let re = new RegExp(searchValue, "gi");

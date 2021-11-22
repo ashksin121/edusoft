@@ -35,6 +35,7 @@ export const { setIsLoading, setTeachData } = teachSlice.actions;
 
 export default teachSlice.reducer;
 
+// Fetches data related to teach section
 export const getTeachingData = (userId) => {
     return async (dispatch, getState) => {
         dispatch(setIsLoading(true));
@@ -50,7 +51,6 @@ export const getTeachingData = (userId) => {
         let rejectedCourseIds = [];
         querySnapshot.forEach((doc) => {
             let courseData = doc.data();
-            console.log("Course:", courseData);
             courseData.courseId = doc.id;
             if (courseData.status === "REJECTED") {
                 rejectedCourses.push(courseData);

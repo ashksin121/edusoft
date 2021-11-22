@@ -26,6 +26,7 @@ const RejectedCourses = () => {
 
     const [searchValue, setSearchValue] = useState("");
 
+    // Data from redux store
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.teach.isLoading);
     const rejectedCourses = useSelector((state) => state.teach.rejectedCourses);
@@ -35,7 +36,8 @@ const RejectedCourses = () => {
     }, [dispatch, userId]);
 
     const handleSearch = (e) => {
-        setSearchValue(e.target.value);
+        const res = e.target.value.trim();
+        setSearchValue(res);
     };
 
     return (
@@ -77,6 +79,7 @@ const RejectedCourses = () => {
                                     />
                                 </div>
                             </div>
+
                             {rejectedCourses
                                 .filter((course) => {
                                     let re = new RegExp(searchValue, "gi");

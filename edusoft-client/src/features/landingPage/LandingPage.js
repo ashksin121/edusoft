@@ -61,6 +61,7 @@ const LandingPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    // Local state
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -68,10 +69,12 @@ const LandingPage = () => {
     const [isSignup, setIsSignup] = useState(false);
     const [name, setName] = useState("");
 
+    // Handles password visibility
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
 
+    // Allows user to login
     const handleLogin = async () => {
         setIsLoading(true);
         if (email === "" || password === "") {
@@ -96,12 +99,10 @@ const LandingPage = () => {
                 email,
                 password
             );
-            console.log(userCredential.user);
             dispatch(logIn(userCredential.user.uid));
             history.push("/learn");
         } catch (e) {
             setIsLoading(false);
-            console.log(e.code);
             if (e.code === "auth/user-not-found") {
                 toast.error("Email not registered", {
                     containerId: "toastMessage",
@@ -117,6 +118,7 @@ const LandingPage = () => {
         }
     };
 
+    // Allows user to signup
     const handleSignup = async () => {
         setIsLoading(true);
         if (email === "" || name === "" || password === "") {
@@ -152,7 +154,6 @@ const LandingPage = () => {
             history.push("/learn");
         } catch (e) {
             setIsLoading(false);
-            console.log(e.code);
             if (e.code === "auth/email-already-in-use") {
                 toast.error("Email already in use", {
                     containerId: "toastMessage",
@@ -191,6 +192,7 @@ const LandingPage = () => {
                                     The peer-to-peer learning platform
                                 </div>
                             </div>
+
                             <div className="loginCard">
                                 <div
                                     style={{

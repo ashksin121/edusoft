@@ -73,8 +73,10 @@ const AddCourse = () => {
     const classes = useStyles();
     const history = useHistory();
 
+    // Data from redux store
     const userId = useSelector((state) => state.profile.userId);
 
+    // Local state
     const [isLoading, setIsLoading] = useState(false);
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
@@ -109,6 +111,7 @@ const AddCourse = () => {
         },
     ]);
 
+    // Adds tag to course
     const handleAddTag = () => {
         const d = new Date();
         const tagObj = {
@@ -121,16 +124,19 @@ const AddCourse = () => {
         setTags("");
     };
 
+    // Deletes added tag of course
     const handleDelete = (chipToDelete) => () => {
         setTagArray((chips) =>
             chips.filter((chip) => chip.key !== chipToDelete.key)
         );
     };
 
+    // Handles uploaded file delete
     const handleCardClick = (fileToDelete) => {
         setFilesArray((files) => files.filter((file) => file !== fileToDelete));
     };
 
+    // Allows user to submit course
     const handleSubmit = () => {
         setIsLoading(true);
         let allCheck = true;
@@ -204,7 +210,6 @@ const AddCourse = () => {
             })
             .catch((e) => {
                 setIsLoading(false);
-                console.log(e);
             });
     };
 
@@ -217,6 +222,7 @@ const AddCourse = () => {
                     <Divider style={{ marginBottom: 30 }} />
                     <div className="pageSubHeading">Course Details</div>
                     <Divider style={{ marginBottom: 30 }} />
+
                     <form className={classes.formDiv}>
                         <FormControl
                             className={classes.textField}
@@ -227,12 +233,14 @@ const AddCourse = () => {
                                 label="Course Title"
                                 value={title}
                                 onChange={(e) => {
-                                    setTitle(e.target.value);
+                                    const res = e.target.value.trim();
+                                    setTitle(res);
                                 }}
-                                inputProps={{ maxLength: 25 }}
-                                helperText={`${title.length}/25`}
+                                inputProps={{ maxLength: 50 }}
+                                helperText={`${title.length}/50`}
                             />
                         </FormControl>
+
                         <FormControl
                             className={classes.textField}
                             style={{ marginBottom: "30px" }}
@@ -244,12 +252,14 @@ const AddCourse = () => {
                                 rows={5}
                                 value={desc}
                                 onChange={(e) => {
-                                    setDesc(e.target.value);
+                                    const res = e.target.value.trim();
+                                    setDesc(res);
                                 }}
-                                inputProps={{ maxLength: 250 }}
-                                helperText={`${desc.length}/250`}
+                                inputProps={{ maxLength: 500 }}
+                                helperText={`${desc.length}/500`}
                             />
                         </FormControl>
+
                         <FormControl
                             className={classes.textField}
                             style={{ marginBottom: "30px", display: "flex" }}
@@ -261,10 +271,11 @@ const AddCourse = () => {
                                         label="Course Tags"
                                         value={tags}
                                         onChange={(e) => {
-                                            setTags(e.target.value);
+                                            const res = e.target.value.trim();
+                                            setTags(res);
                                         }}
-                                        inputProps={{ maxLength: 15 }}
-                                        helperText={`${tags.length}/15`}
+                                        inputProps={{ maxLength: 25 }}
+                                        helperText={`${tags.length}/25`}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={2}>
@@ -272,12 +283,14 @@ const AddCourse = () => {
                                         variant="contained"
                                         onClick={handleAddTag}
                                         fullWidth
+                                        disabled={tags === ""}
                                     >
                                         Add Tag
                                     </Button>
                                 </Grid>
                             </Grid>
                         </FormControl>
+
                         {tagArray.length > 0 ? (
                             <Paper
                                 sx={{
@@ -303,6 +316,7 @@ const AddCourse = () => {
                                 })}
                             </Paper>
                         ) : null}
+
                         <FormControl
                             className={classes.textField}
                             style={{ marginBottom: "30px" }}
@@ -331,6 +345,7 @@ const AddCourse = () => {
                                 </Button>
                             </label>
                         </FormControl>
+
                         {filesArray.length > 0 ? (
                             <div style={{ marginBottom: 30 }}>
                                 <div style={{ marginBottom: 10 }}>
@@ -356,6 +371,7 @@ const AddCourse = () => {
                             </div>
                         ) : null}
                     </form>
+
                     <div className="pageSubHeading">Quiz Details</div>
                     <Divider style={{ marginBottom: 30 }} />
                     {questions.map((ques, idx) => (
@@ -370,12 +386,13 @@ const AddCourse = () => {
                                     value={ques.question}
                                     onChange={(e) => {
                                         let newQuestions = [...questions];
-                                        newQuestions[idx].question =
-                                            e.target.value;
+                                        const res = e.target.value.trim();
+                                        newQuestions[idx].question = res;
                                         setQuestions(newQuestions);
                                     }}
                                 />
                             </FormControl>
+
                             <Grid container spacing={2}>
                                 {ques.options.map((opt, indx) => (
                                     <Grid key={indx} item xs={12} sm={6} md={3}>
@@ -391,9 +408,11 @@ const AddCourse = () => {
                                                     let newQuestions = [
                                                         ...questions,
                                                     ];
+                                                    const res =
+                                                        e.target.value.trim();
                                                     newQuestions[idx].options[
                                                         indx
-                                                    ] = e.target.value;
+                                                    ] = res;
                                                     setQuestions(newQuestions);
                                                 }}
                                             />
@@ -401,6 +420,7 @@ const AddCourse = () => {
                                     </Grid>
                                 ))}
                             </Grid>
+
                             <FormControl
                                 className={classes.textField}
                                 style={{ marginBottom: "30px" }}
@@ -419,14 +439,15 @@ const AddCourse = () => {
                                     }}
                                     onChange={(e) => {
                                         let newQuestions = [...questions];
-                                        newQuestions[idx].answer =
-                                            e.target.value;
+                                        const res = e.target.value.trim();
+                                        newQuestions[idx].answer = res;
                                         setQuestions(newQuestions);
                                     }}
                                 />
                             </FormControl>
                         </div>
                     ))}
+
                     {isLoading ? (
                         <div
                             className="loginCircularProgress"

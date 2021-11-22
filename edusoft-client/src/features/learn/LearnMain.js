@@ -22,6 +22,7 @@ const LearnMain = () => {
     let history = useHistory();
     const dispatch = useDispatch();
 
+    // Data from Redux store
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.learn.isLoading);
     const allCourses = useSelector((state) => state.learn.allCourses);
@@ -63,6 +64,7 @@ const LearnMain = () => {
                         </div>
                     ) : (
                         <div>
+                            {/* Pending Courses carousel */}
                             {pendingCourses.length !== 0 ? (
                                 <div>
                                     <div className="pageHeadingWithButton">
@@ -134,6 +136,8 @@ const LearnMain = () => {
                                     </Carousel>
                                 </div>
                             ) : null}
+
+                            {/* All Courses Tiles */}
                             <div className="pageHeadingWithButton">
                                 <div>All Courses</div>
                                 <div
@@ -195,6 +199,8 @@ const LearnMain = () => {
                                     })}
                                 </Grid>
                             )}
+
+                            {/* Completed courses tiles */}
                             {completedCourses.length !== 0 ? (
                                 <div>
                                     <div className="pageHeadingWithButton">
@@ -250,47 +256,6 @@ const LearnMain = () => {
                             ) : null}
                         </div>
                     )}
-                    {/* <div className="learnMainCont">
-                        <div
-                            className="allCoursesCard"
-                            onClick={() => {
-                                history.push("/learn/allCourses");
-                            }}
-                        >
-                            <div className="cardIcon">
-                                <DescriptionIcon
-                                    style={{ color: "blue", fontSize: 130 }}
-                                />
-                            </div>
-                            <div className="cardTitle">All Courses</div>
-                        </div>
-                        <div
-                            className="pendingCoursesCard"
-                            onClick={() => {
-                                history.push("/learn/pendingCourses");
-                            }}
-                        >
-                            <div className="cardIcon">
-                                <PendingActionsIcon
-                                    style={{ color: "#926900", fontSize: 130 }}
-                                />
-                            </div>
-                            <div className="cardTitle">Pending Courses</div>
-                        </div>
-                        <div
-                            className="acceptedCoursesCard"
-                            onClick={() => {
-                                history.push("/learn/completedCourses");
-                            }}
-                        >
-                            <div className="cardIcon">
-                                <CheckCircleIcon
-                                    style={{ color: "green", fontSize: 130 }}
-                                />
-                            </div>
-                            <div className="cardTitle">Completed Courses</div>
-                        </div>
-                    </div> */}
                 </Container>
             </div>
             <Footer headerUrl="learn" />

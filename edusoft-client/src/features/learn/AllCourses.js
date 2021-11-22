@@ -24,6 +24,7 @@ const AllCourses = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    // Data from redux store
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.learn.isLoading);
     const allCourses = useSelector((state) => state.learn.allCourses);
@@ -41,9 +42,9 @@ const AllCourses = () => {
     const [searchValue, setSearchValue] = useState("");
 
     const handleSearch = (e) => {
-        setSearchValue(e.target.value);
+        const res = e.target.value.trim();
+        setSearchValue(res);
     };
-    console.log(allCourses);
 
     return (
         <div className="appBody">
@@ -84,6 +85,7 @@ const AllCourses = () => {
                                     />
                                 </div>
                             </div>
+
                             {allCourses
                                 .filter((course) => {
                                     let re = new RegExp(searchValue, "gi");

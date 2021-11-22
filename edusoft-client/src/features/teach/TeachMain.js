@@ -16,6 +16,7 @@ const TeachMain = () => {
     let history = useHistory();
     const dispatch = useDispatch();
 
+    // Data from redux store
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.teach.isLoading);
     const uploadedCourses = useSelector((state) => state.teach.uploadedCourses);
@@ -49,6 +50,7 @@ const TeachMain = () => {
                         </div>
                     ) : (
                         <div>
+                            {/* Uploaded Courses tiles */}
                             <div className="pageHeadingWithButton">
                                 <div>Uploaded Courses</div>
                                 <div
@@ -110,6 +112,8 @@ const TeachMain = () => {
                                     })}
                                 </Grid>
                             )}
+
+                            {/* Accepted Courses tile */}
                             {acceptedCourses.length !== 0 ? (
                                 <div>
                                     <div className="pageHeadingWithButton">
@@ -163,6 +167,8 @@ const TeachMain = () => {
                                     </Grid>
                                 </div>
                             ) : null}
+
+                            {/* Rejected Courses tile */}
                             {rejectedCourses.length !== 0 ? (
                                 <div>
                                     <div className="pageHeadingWithButton">
@@ -218,43 +224,10 @@ const TeachMain = () => {
                             ) : null}
                         </div>
                     )}
-                    {/* <div className="teachMainCont">
-                        <div
-                            className="allCoursesCard"
-                            onClick={() => {
-                                history.push("/teach/uploadedCourses");
-                            }}
-                        >
-                            <DescriptionIcon
-                                style={{ color: "blue", fontSize: 130 }}
-                            />
-                            <div className="cardTitle">Uploaded Courses</div>
-                        </div>
-                        <div
-                            className="acceptedCoursesCard"
-                            onClick={() => {
-                                history.push("/teach/acceptedCourses");
-                            }}
-                        >
-                            <CheckCircleIcon
-                                style={{ color: "green", fontSize: 130 }}
-                            />
-                            <div className="cardTitle">Accepted Courses</div>
-                        </div>
-                        <div
-                            className="rejectedCoursesCard"
-                            onClick={() => {
-                                history.push("/teach/rejectedCourses");
-                            }}
-                        >
-                            <CancelIcon
-                                style={{ color: "#9b2505", fontSize: 130 }}
-                            />
-                            <div className="cardTitle">Rejected Courses</div>
-                        </div>
-                    </div> */}
                 </Container>
             </div>
+
+            {/* Add Course button */}
             <Fab
                 variant="extended"
                 color="primary"
@@ -275,13 +248,6 @@ const TeachMain = () => {
                 <AddIcon sx={{ mr: 1 }} style={{ fontSize: 27 }} />
                 Add Course
             </Fab>
-            {/* <div className="lowerbarCont">
-                <Container
-                    style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                    
-                </Container>
-            </div> */}
             <Footer headerUrl="teach" />
         </div>
     );

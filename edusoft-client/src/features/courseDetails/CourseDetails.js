@@ -61,12 +61,14 @@ const CourseDetails = () => {
     const history = useHistory();
     const dispatch = useDispatch();
 
+    // Local state
     const [courseId, setCourseId] = useState("");
     const [courseData, setCourseData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [answers, setAnswers] = useState(["", "", "", "", ""]);
     const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
 
+    // Data from redux store
     const userId = useSelector((state) => state.profile.userId);
     const coins = useSelector((state) => state.profile.coins);
     const profileLoading = useSelector((state) => state.profile.isLoading);
@@ -99,11 +101,11 @@ const CourseDetails = () => {
         setIsLoading(false);
     }, [setCourseId, history]);
 
+    // Allows user to enroll to selected course
     const handleEnrollToCourse = () => {
         setIsLoading(true);
         let newPendingCourses = [...pendingCoursesIds];
         newPendingCourses.push(courseId);
-        console.log(userId, newPendingCourses);
         const docRef = doc(db, "users", userId);
         setDoc(docRef, { pendingCourses: newPendingCourses }, { merge: true });
         const uid = userId;
@@ -113,6 +115,7 @@ const CourseDetails = () => {
         setIsLoading(false);
     };
 
+    // Allows user to submit quiz and end course
     const handleSubmitQuiz = () => {
         setIsSubmittingQuiz(true);
         let allCheck = true;
@@ -135,7 +138,6 @@ const CourseDetails = () => {
                 marks++;
             }
         }
-        console.log(marks);
         let newPendingCourses = [...pendingCoursesIds];
         const index = newPendingCourses.indexOf(courseId);
         newPendingCourses.splice(index, 1);
@@ -146,13 +148,6 @@ const CourseDetails = () => {
             [courseId]: marks,
         };
         const newCoins = coins + marks * 2;
-        console.log(
-            marks,
-            newPendingCourses,
-            newCompletedCourses,
-            newAnswersMap,
-            newCoins
-        );
         const docRef = doc(db, "users", userId);
         setDoc(
             docRef,
@@ -171,8 +166,6 @@ const CourseDetails = () => {
         setIsLoading(false);
         setIsSubmittingQuiz(false);
     };
-
-    console.log("Course Details:", courseData);
 
     return (
         <div className="appBody">
@@ -201,21 +194,25 @@ const CourseDetails = () => {
                                 </div>
                             </div>
                         </div>
+
                         {courseData.status === "REJECTED" ? (
                             <div className="courseDetailsRejection">
                                 The course was rejected because{" "}
                                 {courseData.rejectRemarks}
                             </div>
                         ) : null}
+
                         {courseData.status === "REVIEW" &&
                         userId === courseData.instructorId ? (
                             <div className="courseDetailsAccept">
                                 Your course is yet to be accepted!!
                             </div>
                         ) : null}
+
                         <div className="courseDetailsDesc">
                             {courseData.desc}
                         </div>
+
                         <Paper
                             sx={{
                                 display: "flex",
@@ -241,6 +238,7 @@ const CourseDetails = () => {
                                 );
                             })}
                         </Paper>
+
                         {courseData.instructorId === userId ||
                         pendingCoursesIds.includes(courseId) ||
                         completedCoursesIds.includes(courseId) ? (
@@ -362,8 +360,9 @@ const CourseDetails = () => {
                                                     let newAnswers = [
                                                         ...answers,
                                                     ];
-                                                    newAnswers[idx] =
-                                                        e.target.value;
+                                                    const res =
+                                                        e.target.value.trim();
+                                                    newAnswers[idx] = res;
                                                     setAnswers(newAnswers);
                                                 }}
                                             />
@@ -372,6 +371,7 @@ const CourseDetails = () => {
                                 ))}
                             </div>
                         ) : null}
+
                         {courseData.instructorId !== userId &&
                         !pendingCoursesIds.includes(courseId) &&
                         !completedCoursesIds.includes(courseId) ? (
@@ -392,6 +392,7 @@ const CourseDetails = () => {
                                 Enroll to course
                             </Button>
                         ) : null}
+
                         {pendingCoursesIds.includes(courseId) &&
                         !isSubmittingQuiz ? (
                             <Button

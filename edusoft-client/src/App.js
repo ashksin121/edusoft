@@ -40,6 +40,7 @@ function App() {
 
     return (
         <div className="App">
+            {/* Routing depending upon user is logged in or not */}
             {authToken ? (
                 <Router>
                     <Switch>

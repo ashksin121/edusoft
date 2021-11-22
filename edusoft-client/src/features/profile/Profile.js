@@ -15,6 +15,7 @@ const Profile = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    // Data from redx store
     const userId = useSelector((state) => state.profile.userId);
     const name = useSelector((state) => state.profile.name);
     const coins = useSelector((state) => state.profile.coins);
@@ -41,13 +42,12 @@ const Profile = () => {
         setIsLoading(false);
     }, [dispatch, userId]);
 
+    // Allows user to logout
     const handleLogout = async () => {
         try {
             await dispatch(logOut());
             history.push("/");
-        } catch (err) {
-            console.log(err);
-        }
+        } catch (err) {}
     };
 
     return (
@@ -141,6 +141,8 @@ const Profile = () => {
                                 {rejectedCourses.length}
                             </div>
                         </div>
+
+                        {/* Logout button */}
                         <div className="profileButtonCont">
                             <Button
                                 variant="contained"

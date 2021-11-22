@@ -26,6 +26,7 @@ const UploadedCourses = () => {
 
     const [searchValue, setSearchValue] = useState("");
 
+    // Data from Redux store
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.teach.isLoading);
     const uploadedCourses = useSelector((state) => state.teach.uploadedCourses);
@@ -41,7 +42,8 @@ const UploadedCourses = () => {
     }, [dispatch, userId]);
 
     const handleSearch = (e) => {
-        setSearchValue(e.target.value);
+        const res = e.target.value.trim();
+        setSearchValue(res);
     };
 
     return (
@@ -83,6 +85,7 @@ const UploadedCourses = () => {
                                     />
                                 </div>
                             </div>
+
                             {uploadedCourses
                                 .filter((course) => {
                                     let re = new RegExp(searchValue, "gi");

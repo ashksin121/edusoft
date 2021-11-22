@@ -15,11 +15,13 @@ import { logIn } from "../profile/profileSlice";
 const Session = () => {
     const dispatch = useDispatch();
 
+    // Data from redux store
     const sessionsBooked = useSelector((state) => state.profile.sessionsBooked);
     const profileLoading = useSelector((state) => state.profile.isLoading);
     const userId = useSelector((state) => state.profile.userId);
     const coins = useSelector((state) => state.profile.coins);
 
+    // Local state
     const [isLoading, setIsLoading] = useState(false);
     const [bookedSessions, setBookedSessions] = useState([]);
     const [upcomingSessions, setUpcomingSessions] = useState([]);
@@ -53,6 +55,7 @@ const Session = () => {
         setIsLoading(false);
     }, [setIsLoading, isReload, sessionsBooked]);
 
+    // Allows user to book selected session
     const handleBookSession = (sessionId, seats) => {
         let newBookings = [...sessionsBooked];
         newBookings.push(sessionId);
@@ -88,6 +91,7 @@ const Session = () => {
                         </div>
                     ) : (
                         <div style={{ width: "100%" }}>
+                            {/* Booked Sessions section */}
                             <div className="pageHeading">
                                 <div>Booked Sessions</div>
                             </div>
@@ -136,6 +140,8 @@ const Session = () => {
                                     ))
                                 )}
                             </Grid>
+
+                            {/* Upcoming Sessions section */}
                             <div
                                 className="pageHeading"
                                 style={{ marginTop: 50 }}

@@ -42,6 +42,7 @@ export const { resetProfile, setIsLoading, setProfile } = profileSlice.actions;
 
 export default profileSlice.reducer;
 
+// Puts data in redux store after signup
 export const signUp = (userData) => {
     return async (dispatch) => {
         await setDoc(doc(db, "users", userData.user.uid), {
@@ -68,16 +69,15 @@ export const signUp = (userData) => {
     };
 };
 
+// Puts data in redux store after login
 export const logIn = (userId) => {
     return async (dispatch) => {
         dispatch(setIsLoading(true));
-        console.log(userId);
         const docRef = doc(db, "users", userId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
             const userData = docSnap.data();
-            console.log(userData);
             localStorage.setItem("userId", userId);
             dispatch(
                 setProfile({
@@ -90,6 +90,7 @@ export const logIn = (userId) => {
             );
             dispatch(setIsLoading(false));
         } else {
+            localStorage.removeItem("userId");
             throw new Error("Data not found");
         }
     };

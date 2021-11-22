@@ -26,6 +26,7 @@ const PendingCourses = () => {
 
     const [searchValue, setSearchValue] = useState("");
 
+    // Data from redux store
     const userId = useSelector((state) => state.profile.userId);
     const isLoading = useSelector((state) => state.learn.isLoading);
     const pendingCourses = useSelector((state) => state.learn.pendingCourses);
@@ -35,7 +36,8 @@ const PendingCourses = () => {
     }, [dispatch, userId]);
 
     const handleSearch = (e) => {
-        setSearchValue(e.target.value);
+        const res = e.target.value.trim();
+        setSearchValue(res);
     };
 
     return (

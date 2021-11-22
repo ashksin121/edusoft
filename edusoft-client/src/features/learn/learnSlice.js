@@ -36,10 +36,10 @@ export const { setIsLoading, setLearnData } = learnSlice.actions;
 
 export default learnSlice.reducer;
 
+// fetches all data related to Learn section
 export const getLearningData = (userId) => {
     return async (dispatch, getState) => {
         dispatch(setIsLoading(true));
-        console.log("UserId: ", userId);
         if (userId !== "") {
             const querySnapshot = await getDocs(collection(db, "courses"));
             let courses = [];
