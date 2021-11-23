@@ -120,7 +120,7 @@ const CourseDetails = () => {
         setIsSubmittingQuiz(true);
         let allCheck = true;
         answers.forEach((ans) => {
-            if (ans.length === 0 || parseInt(ans) < 1 || parseInt(ans) > 4) {
+            if (ans.trim() === "" || parseInt(ans) < 1 || parseInt(ans) > 4) {
                 allCheck = false;
             }
         });
@@ -134,7 +134,10 @@ const CourseDetails = () => {
         let marks = 0;
         let i = 0;
         for (i = 0; i < 5; i++) {
-            if (courseData.questions[i].answer === answers[i]) {
+            if (
+                parseInt(courseData.questions[i].answer) ===
+                parseInt(answers[i])
+            ) {
                 marks++;
             }
         }
@@ -360,8 +363,7 @@ const CourseDetails = () => {
                                                     let newAnswers = [
                                                         ...answers,
                                                     ];
-                                                    const res =
-                                                        e.target.value.trim();
+                                                    const res = e.target.value;
                                                     newAnswers[idx] = res;
                                                     setAnswers(newAnswers);
                                                 }}

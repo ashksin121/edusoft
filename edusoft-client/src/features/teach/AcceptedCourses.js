@@ -36,7 +36,7 @@ const AcceptedCourses = () => {
     }, [dispatch, userId]);
 
     const handleSearch = (e) => {
-        const res = e.target.value.trim();
+        const res = e.target.value;
         setSearchValue(res);
     };
 
@@ -82,7 +82,10 @@ const AcceptedCourses = () => {
 
                             {acceptedCourses
                                 .filter((course) => {
-                                    let re = new RegExp(searchValue, "gi");
+                                    let re = new RegExp(
+                                        searchValue.trim(),
+                                        "gi"
+                                    );
                                     if (searchValue === "") {
                                         return true;
                                     }

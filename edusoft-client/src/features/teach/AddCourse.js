@@ -116,7 +116,7 @@ const AddCourse = () => {
         const d = new Date();
         const tagObj = {
             key: d.toString(),
-            label: tags,
+            label: tags.trim(),
         };
         let tagArr = tagArray;
         tagArr.push(tagObj);
@@ -140,27 +140,28 @@ const AddCourse = () => {
     const handleSubmit = () => {
         setIsLoading(true);
         let allCheck = true;
+
         if (
-            title.length === 0 ||
-            desc.length === 0 ||
+            title.trim() === "" ||
+            desc.trim() === "" ||
             tagArray.length === 0 ||
             filesArray.length === 0
         ) {
             allCheck = false;
         }
         questions.forEach((ques) => {
-            if (ques.question.length === 0) {
+            if (ques.question.trim === "") {
                 allCheck = false;
             }
             if (
-                ques.answer.length === 0 ||
+                ques.answer.trim() === "" ||
                 parseInt(ques.answer) < 1 ||
                 parseInt(ques.answer) > 4
             ) {
                 allCheck = false;
             }
             ques.options.forEach((opt) => {
-                if (opt.length === 0) {
+                if (opt.trim() === "") {
                     allCheck = false;
                 }
             });
@@ -196,8 +197,8 @@ const AddCourse = () => {
                 });
                 Promise.all(urlPromises).then(async (tasks) => {
                     const courseData = {
-                        title: title,
-                        desc: desc,
+                        title: title.trim(),
+                        desc: desc.trim(),
                         tagArray: tagArray,
                         fileUrl: fileUrl,
                         questions: questions,
@@ -233,7 +234,7 @@ const AddCourse = () => {
                                 label="Course Title"
                                 value={title}
                                 onChange={(e) => {
-                                    const res = e.target.value.trim();
+                                    const res = e.target.value;
                                     setTitle(res);
                                 }}
                                 inputProps={{ maxLength: 50 }}
@@ -252,7 +253,7 @@ const AddCourse = () => {
                                 rows={5}
                                 value={desc}
                                 onChange={(e) => {
-                                    const res = e.target.value.trim();
+                                    const res = e.target.value;
                                     setDesc(res);
                                 }}
                                 inputProps={{ maxLength: 500 }}
@@ -271,7 +272,7 @@ const AddCourse = () => {
                                         label="Course Tags"
                                         value={tags}
                                         onChange={(e) => {
-                                            const res = e.target.value.trim();
+                                            const res = e.target.value;
                                             setTags(res);
                                         }}
                                         inputProps={{ maxLength: 25 }}
@@ -283,7 +284,7 @@ const AddCourse = () => {
                                         variant="contained"
                                         onClick={handleAddTag}
                                         fullWidth
-                                        disabled={tags === ""}
+                                        disabled={tags.trim() === ""}
                                     >
                                         Add Tag
                                     </Button>
@@ -386,7 +387,7 @@ const AddCourse = () => {
                                     value={ques.question}
                                     onChange={(e) => {
                                         let newQuestions = [...questions];
-                                        const res = e.target.value.trim();
+                                        const res = e.target.value;
                                         newQuestions[idx].question = res;
                                         setQuestions(newQuestions);
                                     }}
@@ -408,8 +409,7 @@ const AddCourse = () => {
                                                     let newQuestions = [
                                                         ...questions,
                                                     ];
-                                                    const res =
-                                                        e.target.value.trim();
+                                                    const res = e.target.value;
                                                     newQuestions[idx].options[
                                                         indx
                                                     ] = res;
@@ -439,7 +439,7 @@ const AddCourse = () => {
                                     }}
                                     onChange={(e) => {
                                         let newQuestions = [...questions];
-                                        const res = e.target.value.trim();
+                                        const res = e.target.value;
                                         newQuestions[idx].answer = res;
                                         setQuestions(newQuestions);
                                     }}
