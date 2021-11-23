@@ -84,10 +84,10 @@ const Session = () => {
         setIsAddingSession(true);
         let allCheck = true;
         if (
-            sessionName === "" ||
-            mentorName === "" ||
-            sessionUrl === "" ||
-            seatsLeft === "" ||
+            sessionName.trim() === "" ||
+            mentorName.trim() === "" ||
+            sessionUrl.trim() === "" ||
+            seatsLeft.trim() === "" ||
             parseInt(seatsLeft) > 5
         ) {
             allCheck = false;
@@ -120,8 +120,8 @@ const Session = () => {
             moment(sessionStartTime).format("HH:mm:ss");
         let sessionActualEndTime = moment(sessionEndTime).format("HH:mm:ss");
         const sessionData = {
-            sessionName: sessionName,
-            mentorName: mentorName,
+            sessionName: sessionName.trim(),
+            mentorName: mentorName.trim(),
             sessionDate: Timestamp.fromDate(sessionDate),
             sessionStartTime: Timestamp.fromDate(
                 new Date(sessionActualDate + " " + sessionActualStartTime)
@@ -130,7 +130,7 @@ const Session = () => {
                 new Date(sessionActualDate + " " + sessionActualEndTime)
             ),
             seatsLeft: parseInt(seatsLeft),
-            sessionUrl: sessionUrl,
+            sessionUrl: sessionUrl.trim(),
         };
 
         const sessionRef = await addDoc(
@@ -274,7 +274,7 @@ const Session = () => {
                         fullWidth
                         value={sessionName}
                         onChange={(e) => {
-                            const res = e.target.value.trim();
+                            const res = e.target.value;
                             setSessionName(res);
                         }}
                         style={{ marginBottom: 50 }}
@@ -286,7 +286,7 @@ const Session = () => {
                         fullWidth
                         value={mentorName}
                         onChange={(e) => {
-                            const res = e.target.value.trim();
+                            const res = e.target.value;
                             setMentorName(res);
                         }}
                         style={{ marginBottom: 50 }}
@@ -352,7 +352,7 @@ const Session = () => {
                         value={seatsLeft}
                         type="number"
                         onChange={(e) => {
-                            const res = e.target.value.trim();
+                            const res = e.target.value;
                             setSeatsLeft(res);
                         }}
                         style={{ marginBottom: 50 }}
@@ -364,7 +364,7 @@ const Session = () => {
                         fullWidth
                         value={sessionUrl}
                         onChange={(e) => {
-                            const res = e.target.value.trim();
+                            const res = e.target.value;
                             setSessionUrl(res);
                         }}
                         style={{ marginBottom: 50 }}

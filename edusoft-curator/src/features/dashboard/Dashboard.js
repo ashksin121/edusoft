@@ -139,7 +139,7 @@ const Dashboard = () => {
     const handleCourseAccept = async () => {
         setIsUpdate(true);
         if (
-            acceptPoints === "" ||
+            acceptPoints.trim() === "" ||
             parseInt(acceptPoints) < 1 ||
             parseInt(acceptPoints) > 10
         ) {
@@ -167,7 +167,7 @@ const Dashboard = () => {
     // Rejects the selected course
     const handleCourseReject = async () => {
         setIsUpdate(true);
-        if (rejectRemarks === "") {
+        if (rejectRemarks.trim() === "") {
             toast.error("Invalid Comments", {
                 containerId: "toastMessage",
             });
@@ -178,7 +178,7 @@ const Dashboard = () => {
         const dataRef = doc(db, "courses", selectedCourseId);
         setDoc(
             dataRef,
-            { status: "REJECTED", rejectRemarks: rejectRemarks },
+            { status: "REJECTED", rejectRemarks: rejectRemarks.trim() },
             { merge: true }
         );
         setReload(!reload);
@@ -225,7 +225,10 @@ const Dashboard = () => {
 
                             {allCourses
                                 .filter((course) => {
-                                    let re = new RegExp(searchValue, "gi");
+                                    let re = new RegExp(
+                                        searchValue.trim(),
+                                        "gi"
+                                    );
                                     if (searchValue === "") {
                                         return true;
                                     }
@@ -408,7 +411,7 @@ const Dashboard = () => {
                             placeholder="Give points out of 10"
                             value={acceptPoints}
                             onChange={(e) => {
-                                const res = e.target.value.trim();
+                                const res = e.target.value;
                                 setAcceptPoints(res);
                             }}
                         />
@@ -454,7 +457,7 @@ const Dashboard = () => {
                             rows={5}
                             value={rejectRemarks}
                             onChange={(e) => {
-                                const res = e.target.value.trim();
+                                const res = e.target.value;
                                 setRejectRemarks(res);
                             }}
                         />
